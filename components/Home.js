@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
 
 const Home = () => {
-  const [homePosts, setPictures] = useState([]);
+  const [homePosts, setPosts] = useState([]);
   const [fix, setFix] = useState(true);
 
   const getPictures = () => {
@@ -27,6 +27,7 @@ const Home = () => {
           tmp.postId = post.id;
           tmp.title = post.title;
           tmp.favorite = post.favorite;
+          tmp.links = [];
           let arr = [];
           if (post.images && Array.isArray(post.images)) {
             post.images.forEach((picture) => {
@@ -37,11 +38,20 @@ const Home = () => {
               });
             });
             tmp.links = arr;
+          } else {
+            if (true || post.link) {
+              arr.push({
+                pictureId: post.id,
+                link: post.link,
+                type: post.type,
+              });
+            }
+            tmp.links = arr;
           }
           res.push(tmp);
         });
 
-        setPictures(res);
+        setPosts(res);
         console.log('PLOP :', res);
       });
     // .catch(error => console.error('Error :', error))
@@ -67,15 +77,23 @@ const Home = () => {
             style={styles.card}
             header={cardHeader.bind(this, { title: item.title })}
           >
-            <Text></Text>
-            {/* <Image
-              resizeMode="contain"
-              source={{
-                // width: 370,
-                // height: 500,
-                uri: item.links.link,
-              }}
-            /> */}
+            {item.links.map((link) => {
+              return (
+                <>
+                  {/* <Text>{link.link}</Text> */}
+
+                  <Image
+                    key={link.pictureId}
+                    resizeMode="center"
+                    source={{
+                      width: 370,
+                      height: 500,
+                      uri: link.link,
+                    }}
+                  />
+                </>
+              );
+            })}
           </Card>
         )}
       />
@@ -92,13 +110,13 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 2,
   },
-  footerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  footerControl: {
-    marginHorizontal: 2,
-  },
+  // footerContainer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'flex-end',
+  // },
+  // footerControl: {
+  //   marginHorizontal: 2,
+  // },
 });
 
 export default Home;
