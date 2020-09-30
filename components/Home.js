@@ -63,7 +63,7 @@ const Home = () => {
 
   const cardHeader = (props) => (
     <View {...props}>
-      <Text category="h1">{props.title}</Text>
+      <Text style={styles.header}>{props.title}</Text>
     </View>
   );
 
@@ -103,6 +103,10 @@ const styles = StyleSheet.create({
   topContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  header: {
+    fontSize: 20,
+    marginLeft: 5,
   },
   card: {
     flex: 1,
