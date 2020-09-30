@@ -41,7 +41,7 @@ class Searchbar extends Component {
   render() {
     return(
       <View style={{ flex: 1 }}>
-        <View style={{ height: 80, backgroundColor: '#c45653',
+        <View style={{ height: 80, backgroundColor: '#008000',
         justifyContent: 'center', paddingHorizontal: 5 }}>
           <Animatable.View animation="slideInRight" duration={500} style={{ height: 50, backgroundColor: 'white',
           flexDirection: 'row', padding:5, alignItems: 'center' }}>

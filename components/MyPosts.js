@@ -66,7 +66,6 @@ const MyPosts = () => {
       .catch(error => console.log('error', error));
   }
 
-
   useEffect(() => {
     getPosts();
     (async () => {
