@@ -28,22 +28,22 @@ const Favorites = () => {
   return (
     <Layout >
       <ScrollView>
-        <Text >Contenu de la page favorites</Text>
         <View style={styles.imgContainer}>
           {
             allFavs.map(fav => {
               return (
                 <View key={fav.id} style={styles.imgContainer}>
-                  <Text category='h3'>{fav.title}</Text>
+                  <Text category='h3' style={styles.titre}>{fav.title}</Text>
                   {
                     fav.images.map(img => {
                       return (
                         <Image
                           key={img.id}
+                          style={styles.image}
                           resizeMode='contain'
                           source={{
                             width: 370,
-                            height: 500,
+                            height: img.height / img.width * 370,
                             uri: img.link
                           }} />
                       )
@@ -65,9 +65,15 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 30,
   },
-  oneFav: {
-
+  image: {
+    borderWidth: 1,
+    borderColor: "black",
+    margin: 10,
+  },
+  titre: {
+    textAlign: "center"
   }
 });
 export default Favorites;

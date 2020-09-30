@@ -1,9 +1,10 @@
 import * as eva from "@eva-design/eva";
-import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
+import { ApplicationProvider, Layout, Text, IconRegistry } from "@ui-kitten/components";
 import Navigation from "./components/Navigation";
 import "react-native-gesture-handler";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import Auth from "./components/Auth";
 
 const HomeScreen = () => (
@@ -13,10 +14,13 @@ const HomeScreen = () => (
 );
 
 export default () => (
-  <ApplicationProvider {...eva} theme={eva.light}>
-    <SafeAreaView style={{ flex: 1, marginTop: 30, marginBottom: 45 }}>
-      {/*  <Auth /> */}
-      <Navigation></Navigation>
-    </SafeAreaView>
-  </ApplicationProvider>
+  <>
+    <IconRegistry icons={EvaIconsPack} />
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <SafeAreaView style={{ flex: 1, marginTop: 30, marginBottom: 45 }}>
+        {/*  <Auth /> */}
+        <Navigation></Navigation>
+      </SafeAreaView>
+    </ApplicationProvider>
+  </>
 );
