@@ -3,25 +3,27 @@ import { StyleSheet } from 'react-native';
 import { Layout, Tab, TabView, Text } from '@ui-kitten/components';
 import Favorites from './Favorites';
 import MyPosts from './MyPosts';
+import Home from './Home';
 
 const Navigation = () => {
-
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   return (
     <TabView
       selectedIndex={selectedIndex}
-      onSelect={index => setSelectedIndex(index)}>
-      <Tab title='HOME'>
-        <Layout
+      onSelect={(index) => setSelectedIndex(index)}
+    >
+      <Tab title="HOME">
+        {/* <Layout
           style={styles.tabContainer}>
           <Text category='h5'>All Pics</Text>
-        </Layout>
+        </Layout> */}
+        <Home />
       </Tab>
-      <Tab title='MY PICS'>
+      <Tab title="MY PICS">
         <MyPosts />
       </Tab>
-      <Tab title='FAVORITES'>
+      <Tab title="FAVORITES">
         <Favorites />
       </Tab>
     </TabView>
