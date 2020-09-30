@@ -52,7 +52,7 @@ const Home = () => {
         });
 
         setPosts(res);
-        console.log('PLOP :', res);
+        // console.log('PLOP :', res);
       });
     // .catch(error => console.error('Error :', error))
   };
@@ -80,8 +80,6 @@ const Home = () => {
             {item.links.map((link) => {
               return (
                 <>
-                  {/* <Text>{link.link}</Text> */}
-
                   <Image
                     key={link.pictureId}
                     resizeMode="center"
