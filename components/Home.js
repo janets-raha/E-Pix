@@ -1,12 +1,22 @@
 import { Layout, Card } from '@ui-kitten/components';
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
+  RefreshControl,
+} from 'react-native';
 
 const Home = () => {
   const [homePosts, setPosts] = useState([]);
   const [fix, setFix] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const getPictures = () => {
+    setLoading(true);
+
     const myHeaders = new Headers();
     myHeaders.append('Authorization', 'Client-ID 546c25a59c58ad7');
 
@@ -52,6 +62,7 @@ const Home = () => {
         });
 
         setPosts(res);
+        setLoading(false);
         // console.log('PLOP :', res);
       });
     // .catch(error => console.error('Error :', error))
@@ -70,6 +81,8 @@ const Home = () => {
   return (
     <Layout>
       <FlatList
+        onRefresh={getPictures}
+        refreshing={loading}
         keyExtractor={(item) => item.postId}
         data={homePosts}
         renderItem={({ item }) => (
@@ -107,10 +120,16 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     marginLeft: 5,
+    padding: 10,
+    // height: 50,
+    textAlignVertical: 'center',
   },
   card: {
     flex: 1,
-    margin: 2,
+    marginHorizontal: 5,
+    marginVertical: 10,
+    // height: 200,
+    backgroundColor: '#e9e9e2',
   },
   // footerContainer: {
   //   flexDirection: 'row',

@@ -13,7 +13,7 @@ const HomeScreen = () => (
 );
 
 export default () => (
-  <ApplicationProvider {...eva} theme={eva.light}>
+  <ApplicationProvider {...eva} theme={eva.dark}>
     <SafeAreaView style={{ flex: 1, marginTop: 30, marginBottom: 45 }}>
       {/*  <Auth /> */}
       <Navigation></Navigation>
