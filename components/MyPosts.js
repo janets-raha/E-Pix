@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Image, ScrollView, StyleSheet, View, Button } from 'react-native';
-import { Layout, Text } from '@ui-kitten/components';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { Layout, Text, Button } from '@ui-kitten/components';
 import * as ImagePicker from 'expo-image-picker';
 
 const MyPosts = () => {
@@ -82,7 +82,7 @@ const MyPosts = () => {
   return (
     <Layout >
 
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      <Button title="Pick an image from camera roll" onPress={pickImage} status="success" />
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
 
