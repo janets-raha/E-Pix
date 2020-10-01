@@ -27,7 +27,7 @@ export default function Auth() {
   const getAuthFromCache = async () => {
     try {
       const cachedAuth = await AsyncStorage.getItem("auth");
-      //console.log("auth", JSON.parse(cachedAuth));
+      console.log("auth", JSON.parse(cachedAuth));
       return JSON.parse(cachedAuth);
     } catch (e) {
       // saving error
@@ -119,14 +119,27 @@ export default function Auth() {
             Login with imgur
           </Button>
         )}
-        {auth && <Text onPress={toggleMenu}>{auth.account_username}</Text>}
+        {auth && (
+          <>
+            <View style={styles.alternativeContainer}>
+              <Text onPress={toggleMenu} appearance="alternative">
+                {auth.account_username}
+              </Text>
+            </View>
+          </>
+        )}
       </View>
       <OverflowMenu
         anchor={renderMenuAction}
         visible={menuVisible}
         onBackdropPress={toggleMenu}
       >
-        <MenuItem accessoryLeft={LogoutIcon} title="Logout" onPress={logout} />
+        <MenuItem
+          accessoryLeft={LogoutIcon}
+          title="Logout"
+          onPress={logout}
+          style={{ padding: 20, textSize: 30 }}
+        />
       </OverflowMenu>
     </>
   );
@@ -140,5 +153,10 @@ const styles = StyleSheet.create({
   },
   login: {
     backgroundColor: "green",
+  },
+  alternativeContainer: {
+    borderRadius: 4,
+    marginVertical: 2,
+    backgroundColor: "#3366FF",
   },
 });
