@@ -26,8 +26,8 @@ export default function Auth() {
 
   const getAuthFromCache = async () => {
     try {
-      const cachedAuth = await AsyncStorage.getItem("auth");
-      console.log("auth", JSON.parse(cachedAuth));
+      const cachedAuth = await AsyncStorage.getItem('auth');
+      console.log('auth', JSON.parse(cachedAuth));
       return JSON.parse(cachedAuth);
     } catch (e) {
       // saving error
@@ -73,10 +73,7 @@ export default function Auth() {
 
   const openBrowserAsync = async () => {
     try {
-<<<<<<< HEAD
-=======
       console.log('clt', process.env.EXPO_CLIENT_ID);
->>>>>>> homePix2
       addLinkingListener();
       let result = await WebBrowser.openBrowserAsync(
         `https://api.imgur.com/oauth2/authorize?client_id=${process.env.EXPO_CLIENT_ID}&response_type=token&state=anystring`
@@ -161,6 +158,6 @@ const styles = StyleSheet.create({
   alternativeContainer: {
     borderRadius: 4,
     marginVertical: 2,
-    backgroundColor: "#3366FF",
+    backgroundColor: '#3366FF',
   },
 });
