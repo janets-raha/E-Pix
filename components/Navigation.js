@@ -4,7 +4,7 @@ import { Layout, Tab, TabView, Text } from '@ui-kitten/components';
 import Favorites from './Favorites';
 import MyPosts from './MyPosts';
 import Home from './Home';
-import NavBar from "./NavBar";
+import NavBar from './NavBar';
 
 const Navigation = () => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -16,7 +16,7 @@ const Navigation = () => {
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}
       >
-        <Tab title="HOME">          
+        <Tab title="HOME">
           <Home />
         </Tab>
         <Tab title="MY PICS">
@@ -32,9 +32,9 @@ const Navigation = () => {
 
 const styles = StyleSheet.create({
   tabContainer: {
-    minHeight: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+    minHeight: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

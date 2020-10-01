@@ -1,4 +1,4 @@
-import { Layout, Card } from '@ui-kitten/components';
+import { Layout, Card, Button } from '@ui-kitten/components';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -27,9 +27,13 @@ const Home = () => {
     };
 
     fetch(
-      'https://api.imgur.com/3/gallery/hot/?showViral=false&mature=false&album_previews=false',
+      'https://api.imgur.com/3/gallery/hot/time/day/1?showViral=false&mature=false&album_previews=false',
       requestOptions
     )
+      // fetch(
+      //   'https://api.imgur.com/3/gallery/hot/?showViral=false&mature=false&album_previews=false',
+      //   requestOptions
+      // )
       .then((Response) => Response.json())
       .then((result) => {
         let res = [];
@@ -111,6 +115,9 @@ const Home = () => {
                 />
               );
             })}
+            <Button style={styles.btt_button} appearance="ghost">
+              ^
+            </Button>
           </View>
           // <Card
           //   style={styles.card}
@@ -171,7 +178,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 5,
-    marginBottom: 30,
+    marginTop: 5,
+    marginBottom: 25,
     borderWidth: 2,
     borderColor: '#e9e9e2',
     borderRadius: 10,
@@ -181,13 +189,19 @@ const styles = StyleSheet.create({
     // borderColor: '#e9e9e2',
     marginTop: 30,
     marginBottom: 10,
-    // borderRadius: 10,
+    borderRadius: 5,
   },
   titre: {
     fontSize: 20,
     marginTop: 10,
     color: '#e9e9e2',
     textAlign: 'center',
+  },
+  btt_button: {
+    marginBottom: 5,
+    borderWidth: 2,
+    borderColor: '#e9e9e2',
+    borderRadius: 100,
   },
 });
 
