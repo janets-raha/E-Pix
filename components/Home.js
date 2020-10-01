@@ -46,6 +46,8 @@ const Home = () => {
                 pictureId: picture.id,
                 link: picture.link,
                 type: picture.type,
+                width: picture.width,
+                height: picture.height,
               });
             });
             tmp.links = arr;
@@ -55,6 +57,8 @@ const Home = () => {
                 pictureId: post.id,
                 link: post.link,
                 type: post.type,
+                width: post.width,
+                height: post.height,
               });
             }
             tmp.links = arr;
@@ -73,39 +77,59 @@ const Home = () => {
     getPictures();
   }, [fix]);
 
-  const cardHeader = (props) => (
-    <View {...props}>
-      <Text style={styles.header}>{props.title}</Text>
-    </View>
-  );
+  // const cardHeader = (props) => (
+  //   <View {...props}>
+  //     <Text style={styles.header}>{props.title}</Text>
+  //   </View>
+  // );
 
   return (
     <Layout>
-      <Searchbar></Searchbar>
+      {/* <Searchbar></Searchbar> */}
       <FlatList
         onRefresh={getPictures}
         refreshing={loading}
         keyExtractor={(item) => item.postId}
         data={homePosts}
         renderItem={({ item }) => (
-          <Card
-            style={styles.card}
-            header={cardHeader.bind(this, { title: item.title })}
-          >
+          <View style={styles.imgContainer}>
+            <Text category="h3" style={styles.titre}>
+              {item.title}
+            </Text>
+
             {item.links.map((link) => {
               return (
                 <Image
                   key={link.pictureId}
-                  resizeMode="center"
+                  style={styles.image}
+                  resizeMode="contain"
                   source={{
                     width: 370,
-                    height: 500,
+                    height: (link.height / link.width) * 370,
                     uri: link.link,
                   }}
                 />
               );
             })}
-          </Card>
+          </View>
+          // <Card
+          //   style={styles.card}
+          //   header={cardHeader.bind(this, { title: item.title })}
+          // >
+          //   {item.links.map((link) => {
+          //     return (
+          //       <Image
+          //         key={link.pictureId}
+          //         resizeMode="center"
+          //         source={{
+          //           width: 370,
+          //           height: 500,
+          //           uri: link.link,
+          //         }}
+          //       />
+          //     );
+          //   })}
+          // </Card>
         )}
       />
     </Layout>
@@ -113,31 +137,58 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
-  topContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  header: {
-    fontSize: 20,
-    marginLeft: 5,
-    padding: 10,
-    // height: 50,
-    textAlignVertical: 'center',
-  },
-  card: {
-    flex: 1,
-    marginHorizontal: 5,
-    marginVertical: 10,
-    // height: 200,
-    backgroundColor: '#e9e9e2',
-  },
-  // footerContainer: {
+  // Style for Card
+  // topContainer: {
   //   flexDirection: 'row',
-  //   justifyContent: 'flex-end',
+  //   justifyContent: 'space-between',
   // },
-  // footerControl: {
-  //   marginHorizontal: 2,
+  // header: {
+  //   fontSize: 20,
+  //   marginLeft: 5,
+  //   padding: 10,
+  //   // height: 50,
+  //   textAlignVertical: 'center',
   // },
+  // card: {
+  //   flex: 1,
+  //   marginHorizontal: 5,
+  //   marginVertical: 10,
+  //   // height: 200,
+  //   backgroundColor: '#e9e9e2',
+  // },
+  // // footerContainer: {
+  // //   flexDirection: 'row',
+  // //   justifyContent: 'flex-end',
+  // // },
+  // // footerControl: {
+  // //   marginHorizontal: 2,
+  // // },
+
+  // Style like Faty
+  imgContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 5,
+    marginBottom: 30,
+    borderWidth: 2,
+    borderColor: '#e9e9e2',
+    borderRadius: 10,
+  },
+  image: {
+    // borderWidth: 2,
+    // borderColor: '#e9e9e2',
+    marginTop: 30,
+    marginBottom: 10,
+    // borderRadius: 10,
+  },
+  titre: {
+    fontSize: 20,
+    marginTop: 10,
+    color: '#e9e9e2',
+    textAlign: 'center',
+  },
 });
 
 export default Home;
