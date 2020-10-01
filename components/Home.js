@@ -84,12 +84,31 @@ const Home = () => {
 
   const backToTop = useRef();
 
-  const backToTopIcon = (props) => (
-    <Icon {...props} name="arrow-circle-up-outline" />
-  );
+  const backToTopIcon = (props) => {
+    // console.log('Icon props :', props);
+    return <Icon {...props} name="arrow-circle-up-outline" />;
+  };
 
   return (
     <Layout>
+      <Button
+        title="back to top"
+        style={styles.btt_button}
+        accessoryRight={backToTopIcon.bind(this, {
+          style: {
+            width: 70,
+            height: 70,
+            opacity: 0.75,
+            tintColor: '#ff8000',
+          },
+        })}
+        appearance="outline"
+        onPress={() => {
+          backToTop.current.scrollToIndex({ index: 0 });
+        }}
+        status="warning"
+      ></Button>
+
       {/* <Searchbar></Searchbar> */}
       <FlatList
         ref={backToTop}
@@ -117,7 +136,7 @@ const Home = () => {
                 />
               );
             })}
-            <Button
+            {/* <Button
               title="back to top"
               style={styles.btt_button}
               accessoryRight={backToTopIcon}
@@ -126,7 +145,7 @@ const Home = () => {
                 backToTop.current.scrollToIndex({ index: 0 });
               }}
               status="basic"
-            ></Button>
+            ></Button> */}
           </View>
         )}
       />
@@ -148,8 +167,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   image: {
-    // borderWidth: 2,
-    // borderColor: '#e9e9e2',
     marginTop: 30,
     marginBottom: 10,
     borderRadius: 5,
@@ -161,9 +178,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   btt_button: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    zIndex: 3,
+    bottom: 100,
+    left: 30,
     marginBottom: 5,
-    borderWidth: 2,
-    borderColor: '#e9e9e2',
+    borderWidth: 0,
     borderRadius: 100,
   },
 });
