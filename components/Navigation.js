@@ -1,13 +1,14 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Layout, Tab, TabView, Text } from '@ui-kitten/components';
-import Favorites from './Favorites';
-import MyPosts from './MyPosts';
-import Home from './Home';
+import React from "react";
+import { StyleSheet } from "react-native";
+import { Layout, Tab, TabView, Text } from "@ui-kitten/components";
+import Favorites from "./Favorites";
+import MyPosts from "./MyPosts";
+import Home from "./Home";
 import NavBar from "./NavBar";
+import Search from "./Search";
 
 const Navigation = () => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
 
   return (
     <>
@@ -16,7 +17,10 @@ const Navigation = () => {
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}
       >
-        <Tab title="HOME">          
+        <Tab title="SEARCH">
+          <Search />
+        </Tab>
+        <Tab title="HOME">
           <Home />
         </Tab>
         <Tab title="MY PICS">

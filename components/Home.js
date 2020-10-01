@@ -1,5 +1,5 @@
-import { Layout, Card } from '@ui-kitten/components';
-import React, { useState, useEffect } from 'react';
+import { Layout, Card } from "@ui-kitten/components";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,8 +7,10 @@ import {
   StyleSheet,
   Image,
   RefreshControl,
-} from 'react-native';
-import Searchbar from './Searchbar';
+  processColor,
+} from "react-native";
+
+import Searchbar from "./Searchbar";
 
 const Home = () => {
   const [homePosts, setPosts] = useState([]);
@@ -19,15 +21,18 @@ const Home = () => {
     setLoading(true);
 
     const myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Client-ID 546c25a59c58ad7');
+    myHeaders.append(
+      "Authorization",
+      "Client-ID " + process.env.EXPO_CLIENT_ID
+    );
 
     const requestOptions = {
-      method: 'GET',
+      method: "GET",
       headers: myHeaders,
     };
 
     fetch(
-      'https://api.imgur.com/3/gallery/hot/?showViral=false&mature=false&album_previews=false',
+      "https://api.imgur.com/3/gallery/hot/time/?showViral=false&mature=false&album_previews=false",
       requestOptions
     )
       .then((Response) => Response.json())
@@ -83,6 +88,7 @@ const Home = () => {
     <Layout>
       <Searchbar></Searchbar>
       <FlatList
+        style={{ marginTop: 70 }}
         onRefresh={getPictures}
         refreshing={loading}
         keyExtractor={(item) => item.postId}
@@ -94,17 +100,15 @@ const Home = () => {
           >
             {item.links.map((link) => {
               return (
-                <>
-                  <Image
-                    key={link.pictureId}
-                    resizeMode="center"
-                    source={{
-                      width: 370,
-                      height: 500,
-                      uri: link.link,
-                    }}
-                  />
-                </>
+                <Image
+                  key={link.pictureId}
+                  resizeMode="center"
+                  source={{
+                    width: 370,
+                    height: 500,
+                    uri: link.link,
+                  }}
+                />
               );
             })}
           </Card>
@@ -116,22 +120,22 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   topContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   header: {
     fontSize: 20,
     marginLeft: 5,
     padding: 10,
     // height: 50,
-    textAlignVertical: 'center',
+    textAlignVertical: "center",
   },
   card: {
     flex: 1,
     marginHorizontal: 5,
     marginVertical: 10,
     // height: 200,
-    backgroundColor: '#e9e9e2',
+    backgroundColor: "#e9e9e2",
   },
   // footerContainer: {
   //   flexDirection: 'row',
