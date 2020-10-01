@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
-import * as Linking from "expo-linking";
-import * as WebBrowser from "expo-web-browser";
-import Constants from "expo-constants";
-import AsyncStorage from "@react-native-community/async-storage";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
+import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   Icon,
   MenuItem,
@@ -12,7 +12,7 @@ import {
   Button,
   TopNavigation,
   TopNavigationAction,
-} from "@ui-kitten/components";
+} from '@ui-kitten/components';
 
 const MenuIcon = (props) => <Icon {...props} name="more-vertical" />;
 
@@ -45,7 +45,7 @@ export default function Auth() {
 
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem("auth", JSON.stringify(value));
+      await AsyncStorage.setItem('auth', JSON.stringify(value));
     } catch (e) {
       // saving error
     }
@@ -60,10 +60,10 @@ export default function Auth() {
     const auth = {};
     if (event.url) {
       const authArray = event.url
-        .substring(event.url.indexOf("#") + 1)
-        .split("&");
+        .substring(event.url.indexOf('#') + 1)
+        .split('&');
       authArray.forEach((element) => {
-        let q = element.split("=");
+        let q = element.split('=');
         auth[q[0]] = q[1];
       });
     }
@@ -73,6 +73,10 @@ export default function Auth() {
 
   const openBrowserAsync = async () => {
     try {
+<<<<<<< HEAD
+=======
+      console.log('clt', process.env.EXPO_CLIENT_ID);
+>>>>>>> homePix2
       addLinkingListener();
       let result = await WebBrowser.openBrowserAsync(
         `https://api.imgur.com/oauth2/authorize?client_id=${process.env.EXPO_CLIENT_ID}&response_type=token&state=anystring`
@@ -87,11 +91,11 @@ export default function Auth() {
   };
 
   const addLinkingListener = () => {
-    Linking.addEventListener("url", handleRedirect);
+    Linking.addEventListener('url', handleRedirect);
   };
 
   const removeLinkingListener = () => {
-    Linking.removeEventListener("url", handleRedirect);
+    Linking.removeEventListener('url', handleRedirect);
   };
 
   const [menuVisible, setMenuVisible] = useState(false);
@@ -105,8 +109,8 @@ export default function Auth() {
   );
 
   async function logout() {
-    console.log("logou");
-    const removed = await AsyncStorage.removeItem("auth");
+    console.log('logou');
+    const removed = await AsyncStorage.removeItem('auth');
     setAuth(null);
     toggleMenu();
   }
@@ -147,12 +151,12 @@ export default function Auth() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "space-around",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   login: {
-    backgroundColor: "green",
+    backgroundColor: 'green',
   },
   alternativeContainer: {
     borderRadius: 4,

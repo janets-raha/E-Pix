@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Image, ScrollView, StyleSheet, FlatList, View } from "react-native";
-import { Layout, Text } from "@ui-kitten/components";
-import AsyncStorage from "@react-native-community/async-storage";
-import { authAsync } from "expo-app-auth";
+import React, { useState, useEffect } from 'react';
+import { Image, ScrollView, StyleSheet, FlatList, View } from 'react-native';
+import { Layout, Text } from '@ui-kitten/components';
+import AsyncStorage from '@react-native-community/async-storage';
+import { authAsync } from 'expo-app-auth';
 
 const Favorites = () => {
   const [fix, setFix] = useState(true);
@@ -13,7 +13,7 @@ const Favorites = () => {
 
   const getAuthFromCache = async () => {
     try {
-      const cachedAuth = await AsyncStorage.getItem("auth");
+      const cachedAuth = await AsyncStorage.getItem('auth');
       //console.log("auth", JSON.parse(cachedAuth));
       return JSON.parse(cachedAuth);
     } catch (e) {
@@ -34,27 +34,27 @@ const Favorites = () => {
 
   useEffect(() => {
     if (auth) getFav(auth.access_token);
-    console.log("useeffect");
+    console.log('useeffect');
   }, [fix]);
 
   const getFav = (token) => {
     if (!token && auth) token = auth.access_token;
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + token);
+    myHeaders.append('Authorization', 'Bearer ' + token);
     var requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: myHeaders,
-      redirect: "follow",
+      redirect: 'follow',
     };
     fetch(
-      "https://api.imgur.com/3/account/me/gallery_favorites",
+      'https://api.imgur.com/3/account/me/gallery_favorites',
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
         setFavs(result.data);
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => console.log('error', error));
   };
 
   return (
@@ -94,19 +94,19 @@ const Favorites = () => {
 
 const styles = StyleSheet.create({
   imgContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 30,
   },
   image: {
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: 'black',
     margin: 10,
   },
   titre: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 export default Favorites;

@@ -1,11 +1,11 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { Layout, Tab, TabView, Text } from "@ui-kitten/components";
-import Favorites from "./Favorites";
-import MyPosts from "./MyPosts";
-import Home from "./Home";
-import NavBar from "./NavBar";
-import Search from "./Search";
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { Layout, Tab, TabView, Text } from '@ui-kitten/components';
+import Favorites from './Favorites';
+import MyPosts from './MyPosts';
+import Home from './Home';
+import NavBar from './NavBar';
+import Search from './Search';
 
 const Navigation = () => {
   const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -36,9 +36,9 @@ const Navigation = () => {
 
 const styles = StyleSheet.create({
   tabContainer: {
-    minHeight: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+    minHeight: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
