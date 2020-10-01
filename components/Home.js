@@ -9,6 +9,7 @@ import {
   RefreshControl,
   processColor,
 } from 'react-native';
+import { Video } from 'expo-av';
 
 import Searchbar from './Searchbar';
 
@@ -123,29 +124,49 @@ const Home = () => {
               {item.title}
             </Text>
             {item.links.map((link) => {
-              return (
-                <Image
-                  key={link.pictureId}
-                  style={styles.image}
-                  resizeMode="contain"
-                  source={{
-                    width: 370,
-                    height: (link.height / link.width) * 370,
-                    uri: link.link,
-                  }}
-                />
-              );
+              if (link.type != 'video/mp4') {
+                return (
+                  <>
+                    <Image
+                      key={link.pictureId}
+                      style={styles.image}
+                      resizeMode="contain"
+                      source={{
+                        width: 370,
+                        height: (link.height / link.width) * 370,
+                        uri: link.link,
+                      }}
+                    />
+                    <Text category="p" style={styles.titre}>
+                      {link.type}
+                    </Text>
+                  </>
+                );
+              } else {
+                return (
+                  <>
+                    <Video
+                      key={link.pictureId}
+                      style={styles.image}
+                      source={{
+                        uri: link.link,
+                      }}
+                      rate={1.0}
+                      volume={1.0}
+                      isMuted={true}
+                      resizeMode="contain"
+                      useNativeControls={true}
+                      shouldPlay={true}
+                      isLooping={true}
+                      style={{ width: 300, height: 300 }}
+                    />
+                    <Text category="p" style={styles.titre}>
+                      {link.type}
+                    </Text>
+                  </>
+                );
+              }
             })}
-            {/* <Button
-              title="back to top"
-              style={styles.btt_button}
-              accessoryRight={backToTopIcon}
-              appearance="ghost"
-              onPress={() => {
-                backToTop.current.scrollToIndex({ index: 0 });
-              }}
-              status="basic"
-            ></Button> */}
           </View>
         )}
       />
