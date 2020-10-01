@@ -27,7 +27,7 @@ export default function Auth() {
   const getAuthFromCache = async () => {
     try {
       const cachedAuth = await AsyncStorage.getItem('auth');
-      console.log('auth', JSON.parse(cachedAuth));
+      // console.log('auth', JSON.parse(cachedAuth));
       return JSON.parse(cachedAuth);
     } catch (e) {
       // saving error
@@ -73,7 +73,7 @@ export default function Auth() {
 
   const openBrowserAsync = async () => {
     try {
-      console.log('clt', process.env.EXPO_CLIENT_ID);
+      // console.log('clt', process.env.EXPO_CLIENT_ID);
       addLinkingListener();
       let result = await WebBrowser.openBrowserAsync(
         `https://api.imgur.com/oauth2/authorize?client_id=${process.env.EXPO_CLIENT_ID}&response_type=token&state=anystring`
@@ -106,7 +106,7 @@ export default function Auth() {
   );
 
   async function logout() {
-    console.log('logou');
+    // console.log('logou');
     const removed = await AsyncStorage.removeItem('auth');
     setAuth(null);
     toggleMenu();

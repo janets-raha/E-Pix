@@ -1,5 +1,5 @@
-import { Layout, Card, Button } from '@ui-kitten/components';
-import React, { useState, useEffect } from 'react';
+import { Layout, Card, Button, Icon } from '@ui-kitten/components';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -35,10 +35,6 @@ const Home = () => {
       'https://api.imgur.com/3/gallery/hot/time/day/1?showViral=false&mature=false&album_previews=false',
       requestOptions
     )
-      // fetch(
-      //   'https://api.imgur.com/3/gallery/hot/?showViral=false&mature=false&album_previews=false',
-      //   requestOptions
-      // )
       .then((Response) => Response.json())
       .then((result) => {
         let res = [];
@@ -86,16 +82,17 @@ const Home = () => {
     getPictures();
   }, [fix]);
 
-  // const cardHeader = (props) => (
-  //   <View {...props}>
-  //     <Text style={styles.header}>{props.title}</Text>
-  //   </View>
-  // );
+  const backToTop = useRef();
+
+  const backToTopIcon = (props) => (
+    <Icon {...props} name="arrow-circle-up-outline" />
+  );
 
   return (
     <Layout>
       {/* <Searchbar></Searchbar> */}
       <FlatList
+        ref={backToTop}
         style={{ marginTop: 70 }}
         onRefresh={getPictures}
         refreshing={loading}
@@ -106,7 +103,6 @@ const Home = () => {
             <Text category="h3" style={styles.titre}>
               {item.title}
             </Text>
-
             {item.links.map((link) => {
               return (
                 <Image
@@ -121,28 +117,17 @@ const Home = () => {
                 />
               );
             })}
-            <Button style={styles.btt_button} appearance="ghost">
-              ^
-            </Button>
+            <Button
+              title="back to top"
+              style={styles.btt_button}
+              accessoryRight={backToTopIcon}
+              appearance="ghost"
+              onPress={() => {
+                backToTop.current.scrollToIndex({ index: 0 });
+              }}
+              status="basic"
+            ></Button>
           </View>
-          // <Card
-          //   style={styles.card}
-          //   header={cardHeader.bind(this, { title: item.title })}
-          // >
-          //   {item.links.map((link) => {
-          //     return (
-          //       <Image
-          //         key={link.pictureId}
-          //         resizeMode="center"
-          //         source={{
-          //           width: 370,
-          //           height: 500,
-          //           uri: link.link,
-          //         }}
-          //       />
-          //     );
-          //   })}
-          // </Card>
         )}
       />
     </Layout>
@@ -150,34 +135,6 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
-  // Style for Card
-  // topContainer: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  // },
-  // header: {
-  //   fontSize: 20,
-  //   marginLeft: 5,
-  //   padding: 10,
-  //   // height: 50,
-  //   textAlignVertical: 'center',
-  // },
-  // card: {
-  //   flex: 1,
-  //   marginHorizontal: 5,
-  //   marginVertical: 10,
-  //   // height: 200,
-  //   backgroundColor: '#e9e9e2',
-  // },
-  // // footerContainer: {
-  // //   flexDirection: 'row',
-  // //   justifyContent: 'flex-end',
-  // // },
-  // // footerControl: {
-  // //   marginHorizontal: 2,
-  // // },
-
-  // Style like Faty
   imgContainer: {
     display: 'flex',
     flexDirection: 'column',
