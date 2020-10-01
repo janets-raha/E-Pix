@@ -8,6 +8,7 @@ import {
   Image,
   RefreshControl,
 } from 'react-native';
+import Searchbar from './Searchbar';
 
 const Home = () => {
   const [homePosts, setPosts] = useState([]);
@@ -80,6 +81,7 @@ const Home = () => {
 
   return (
     <Layout>
+      <Searchbar></Searchbar>
       <FlatList
         onRefresh={getPictures}
         refreshing={loading}
