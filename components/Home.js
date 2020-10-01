@@ -94,17 +94,15 @@ const Home = () => {
           >
             {item.links.map((link) => {
               return (
-                <>
-                  <Image
-                    key={link.pictureId}
-                    resizeMode="center"
-                    source={{
-                      width: 370,
-                      height: 500,
-                      uri: link.link,
-                    }}
-                  />
-                </>
+                <Image
+                  key={link.pictureId}
+                  resizeMode="center"
+                  source={{
+                    width: 370,
+                    height: 500,
+                    uri: link.link,
+                  }}
+                />
               );
             })}
           </Card>
