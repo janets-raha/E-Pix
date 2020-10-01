@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button, Image } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Button, Image } from 'react-native';
 import {
   Icon,
   MenuItem,
@@ -7,9 +7,9 @@ import {
   Text,
   TopNavigation,
   TopNavigationAction,
-} from "@ui-kitten/components";
+} from '@ui-kitten/components';
 
-import Auth from "./Auth";
+import Auth from './Auth';
 
 export default function NavBar() {
   //
@@ -17,7 +17,10 @@ export default function NavBar() {
 
   const renderTitle = (props) => (
     <View style={styles.titleContainer}>
-      <Image style={styles.logo} source={require("../assets/splash.png")} />
+      <Image
+        style={styles.logo}
+        source={require('../assets/icon_orange.png')}
+      />
       <Text {...props}>TF4#pixur</Text>
     </View>
   );
@@ -27,8 +30,8 @@ export default function NavBar() {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   logo: {
     marginHorizontal: 16,

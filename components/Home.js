@@ -99,7 +99,7 @@ const Home = () => {
             width: 70,
             height: 70,
             opacity: 0.75,
-            tintColor: '#ff8000',
+            tintColor: '#F46036',
           },
         })}
         appearance="outline"
