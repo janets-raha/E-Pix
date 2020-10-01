@@ -11,13 +11,19 @@ import {
 
 import Auth from "./Auth";
 
-export default function NavBar() {
+export default function NavBar(props) {
   //
-  const renderAuthMenu = () => <Auth />;
+
+  const onLoggedInChange = (status) => {
+    props.onLoggedInChange(status);
+  };
+  const renderAuthMenu = () => <Auth onLoggedInChange={onLoggedInChange} />;
 
   const renderTitle = (props) => (
     <View style={styles.titleContainer}>
-      <Image style={styles.logo} source={require("../assets/splash.png")} />
+      <View style={styles.logoWrapper}>
+        <Image style={styles.logo} source={require("../assets/splash.png")} />
+      </View>
       <Text {...props}>TF4#pixur</Text>
     </View>
   );
@@ -29,10 +35,17 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
+    color: "lightblue",
   },
   logo: {
-    marginHorizontal: 16,
     width: 42,
+    height: 42,
+  },
+  logoWrapper: {
+    marginHorizontal: 16,
+    backgroundColor: "lightblue",
+    width: 42,
+    borderRadius: 8,
     height: 42,
   },
 });

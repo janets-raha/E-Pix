@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
-import Constants from 'expo-constants';
-import AsyncStorage from '@react-native-community/async-storage';
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View } from "react-native";
+import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
+import Constants from "expo-constants";
+import AsyncStorage from "@react-native-community/async-storage";
 import {
   Icon,
   MenuItem,
@@ -12,7 +12,8 @@ import {
   Button,
   TopNavigation,
   TopNavigationAction,
-} from '@ui-kitten/components';
+} from "@ui-kitten/components";
+import { FalsyText } from "@ui-kitten/components/devsupport";
 
 const MenuIcon = (props) => <Icon {...props} name="more-vertical" />;
 
@@ -20,17 +21,16 @@ const InfoIcon = (props) => <Icon {...props} name="info" />;
 
 const LogoutIcon = (props) => <Icon {...props} name="log-out" />;
 
-export default function Auth() {
+export default function Auth(props) {
   //
   const [auth, setAuth] = useState(null);
 
   const getAuthFromCache = async () => {
     try {
-      const cachedAuth = await AsyncStorage.getItem('auth');
-      console.log('auth', JSON.parse(cachedAuth));
+      const cachedAuth = await AsyncStorage.getItem("auth");
       return JSON.parse(cachedAuth);
     } catch (e) {
-      // saving error
+      console.error("Issue get async storage");
     }
   };
 
@@ -45,9 +45,9 @@ export default function Auth() {
 
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem('auth', JSON.stringify(value));
+      await AsyncStorage.setItem("auth", JSON.stringify(value));
     } catch (e) {
-      // saving error
+      console.error("Issue set async storage");
     }
   };
 
@@ -60,20 +60,27 @@ export default function Auth() {
     const auth = {};
     if (event.url) {
       const authArray = event.url
-        .substring(event.url.indexOf('#') + 1)
-        .split('&');
+        .substring(event.url.indexOf("#") + 1)
+        .split("&");
       authArray.forEach((element) => {
-        let q = element.split('=');
+        let q = element.split("=");
         auth[q[0]] = q[1];
       });
     }
     setAuth(auth);
     storeData(auth);
+
+    props.onLoggedInChange(true);
+  };
+
+  const onLoggedInChange = (status) => {
+    console.log("quth loged chag", status, props);
+    //props.onLoggedInChange;
   };
 
   const openBrowserAsync = async () => {
     try {
-      console.log('clt', process.env.EXPO_CLIENT_ID);
+      console.log("clt", process.env.EXPO_CLIENT_ID);
       addLinkingListener();
       let result = await WebBrowser.openBrowserAsync(
         `https://api.imgur.com/oauth2/authorize?client_id=${process.env.EXPO_CLIENT_ID}&response_type=token&state=anystring`
@@ -88,11 +95,11 @@ export default function Auth() {
   };
 
   const addLinkingListener = () => {
-    Linking.addEventListener('url', handleRedirect);
+    Linking.addEventListener("url", handleRedirect);
   };
 
   const removeLinkingListener = () => {
-    Linking.removeEventListener('url', handleRedirect);
+    Linking.removeEventListener("url", handleRedirect);
   };
 
   const [menuVisible, setMenuVisible] = useState(false);
@@ -106,10 +113,10 @@ export default function Auth() {
   );
 
   async function logout() {
-    console.log('logou');
-    const removed = await AsyncStorage.removeItem('auth');
+    const removed = await AsyncStorage.removeItem("auth");
     setAuth(null);
     toggleMenu();
+    props.onLoggedInChange(false);
   }
 
   return (
@@ -123,9 +130,7 @@ export default function Auth() {
         {auth && (
           <>
             <View style={styles.alternativeContainer}>
-              <Text onPress={toggleMenu} appearance="alternative">
-                {auth.account_username}
-              </Text>
+              <Text onPress={toggleMenu}>{auth.account_username}</Text>
             </View>
           </>
         )}
@@ -134,12 +139,13 @@ export default function Auth() {
         anchor={renderMenuAction}
         visible={menuVisible}
         onBackdropPress={toggleMenu}
+        style={{ borderColor: "blue" }}
       >
         <MenuItem
           accessoryLeft={LogoutIcon}
           title="Logout"
           onPress={logout}
-          style={{ padding: 20, textSize: 30 }}
+          style={{ padding: 20 }}
         />
       </OverflowMenu>
     </>
@@ -148,16 +154,19 @@ export default function Auth() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    backgroundColor: "transparent",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
   login: {
-    backgroundColor: 'green',
+    backgroundColor: "green",
+    borderColor: "darkgreen",
   },
   alternativeContainer: {
     borderRadius: 4,
-    marginVertical: 2,
-    backgroundColor: '#3366FF',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginVertical: 0,
+    backgroundColor: "#3366FF",
   },
 });
