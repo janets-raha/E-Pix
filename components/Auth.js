@@ -73,10 +73,7 @@ export default function Auth() {
 
   const openBrowserAsync = async () => {
     try {
-<<<<<<< HEAD
-=======
       console.log('clt', process.env.EXPO_CLIENT_ID);
->>>>>>> homePix2
       addLinkingListener();
       let result = await WebBrowser.openBrowserAsync(
         `https://api.imgur.com/oauth2/authorize?client_id=${process.env.EXPO_CLIENT_ID}&response_type=token&state=anystring`
