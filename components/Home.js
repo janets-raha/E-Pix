@@ -1,4 +1,4 @@
-import { Layout, Card, Button } from '@ui-kitten/components';
+import { Layout, Card, Button, Icon } from '@ui-kitten/components';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -9,13 +9,15 @@ import {
   RefreshControl,
   processColor,
 } from 'react-native';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import Searchbar from './Searchbar';
 
 const Home = () => {
   const [homePosts, setPosts] = useState([]);
   const [fix, setFix] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [auth, setAuth] = useState(null);
+
 
   const getPictures = () => {
     setLoading(true);
@@ -82,6 +84,8 @@ const Home = () => {
     // .catch(error => console.error('Error :', error))
   };
 
+
+
   useEffect(() => {
     getPictures();
   }, [fix]);
@@ -91,6 +95,45 @@ const Home = () => {
   //     <Text style={styles.header}>{props.title}</Text>
   //   </View>
   // );
+
+  const HeartIcon = (props) => <Icon {...props} name="heart" width={30} height={30} style={{ tintColor: "red" }} />;
+
+  const addFavorites = (favId) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + auth.access_token);
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+    };
+    fetch('https://api.imgur.com/3/album/' + favId + '/favorite', requestOptions)
+      .then(response => response.json())
+      .then(result => { console.log(result) })
+      .catch(error => console.log('error', error));
+  }
+
+  const getAuthFromCache = async () => {
+    try {
+      const cachedAuth = await AsyncStorage.getItem('auth');
+      //console.log("auth", JSON.parse(cachedAuth));
+      return JSON.parse(cachedAuth);
+    } catch (e) {
+      // saving error
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      let cachedAuth = await getAuthFromCache();
+      if (cachedAuth && !auth) {
+        setAuth(cachedAuth);
+      }
+    })();
+  });
+
+  const getStyle = () => {
+    return styles.favHeart
+  }
+
 
   return (
     <Layout>
@@ -106,6 +149,12 @@ const Home = () => {
             <Text category="h3" style={styles.titre}>
               {item.title}
             </Text>
+
+            <Button
+              style={styles.favHeart}
+              accessoryRight={HeartIcon}
+              onPress={addFavorites.bind(this, item.postId)}
+            ></Button>
 
             {item.links.map((link) => {
               return (
@@ -209,6 +258,18 @@ const styles = StyleSheet.create({
     borderColor: '#e9e9e2',
     borderRadius: 100,
   },
+  favHeart: {
+    position: "absolute",
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+    opacity: 0.5,
+    height: 20,
+    width: 20,
+    zIndex: 3,
+    right: 20,
+    bottom: 30,
+    borderRadius: 60,
+  }
 });
 
 export default Home;
