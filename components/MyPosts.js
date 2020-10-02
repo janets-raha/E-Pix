@@ -56,18 +56,15 @@ const MyPosts = () => {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      //base64: true,
-      //allowsEditing: true,
+      base64: true,
+      allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-      exif: true,
     });
-    console.log(result)
-    /*if (!result.cancelled) {
-      
-      //setImage(result.base64);
-      //uploadImage(result.base64)
-    }*/
+    if (!result.cancelled) {
+      setImage(result.base64);
+      uploadImage(result.base64)
+    }
   };
 
   const handleChange = (event) => {
