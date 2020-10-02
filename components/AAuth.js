@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { AsyncStorage, Button, StyleSheet, Text, View } from "react-native";
-import * as AppAuth from "expo-app-auth";
+import React, { useEffect, useState } from 'react';
+import { AsyncStorage, Button, StyleSheet, Text, View } from 'react-native';
+import * as AppAuth from 'expo-app-auth';
 
 export default function AAuth() {
   let [authState, setAuthState] = useState(null);
@@ -39,25 +39,25 @@ export default function AAuth() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
 let config = {
-  issuer: "https://api.imgur.com/oauth2/authorize",
-  scopes: ["openid", "profile"],
+  issuer: 'https://api.imgur.com/oauth2/authorize',
+  scopes: ['openid', 'profile'],
   /* This is the CLIENT_ID generated from a Firebase project */
-  clientId: "a7b0a9091b77d8e",
+  clientId: 'a7b0a9091b77d8e',
 };
 
-let StorageKey = "@MyApp:CustomGoogleOAuthKey";
+let StorageKey = '@MyApp:CustomGoogleOAuthKey';
 
 export async function signInAsync() {
   let authState = await AppAuth.authAsync(config);
   await cacheAuthAsync(authState);
-  console.log("signInAsync", authState);
+  // console.log("signInAsync", authState);
   return authState;
 }
 
@@ -68,7 +68,7 @@ async function cacheAuthAsync(authState) {
 export async function getCachedAuthAsync() {
   let value = await AsyncStorage.getItem(StorageKey);
   let authState = JSON.parse(value);
-  console.log("getCachedAuthAsync", authState);
+  // console.log("getCachedAuthAsync", authState);
   if (authState) {
     if (checkIfTokenExpired(authState)) {
       return refreshAuthAsync(authState);
@@ -85,7 +85,7 @@ function checkIfTokenExpired({ accessTokenExpirationDate }) {
 
 async function refreshAuthAsync({ refreshToken }) {
   let authState = await AppAuth.refreshAsync(config, refreshToken);
-  console.log("refreshAuth", authState);
+  // console.log("refreshAuth", authState);
   await cacheAuthAsync(authState);
   return authState;
 }

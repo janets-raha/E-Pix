@@ -34,8 +34,12 @@ const Home = () => {
       headers: myHeaders,
     };
 
+    // fetch(
+    //   'https://api.imgur.com/3/gallery/hot/time/?showViral=false&mature=false&album_previews=false',
+    //   requestOptions
+    // )
     fetch(
-      'https://api.imgur.com/3/gallery/hot/time/day/1?showViral=false&mature=false&album_previews=false',
+      'https://api.imgur.com/3/gallery/hot/time/1?showViral=false&mature=false&album_previews=false',
       requestOptions
     )
       .then((Response) => Response.json())
@@ -76,9 +80,9 @@ const Home = () => {
 
         setPosts(res);
         setLoading(false);
-        // console.log('PLOP :', res);
-      });
-    // .catch(error => console.error('Error :', error))
+        // console.log('PLOP :', res.length);
+      })
+      .catch((error) => console.error('Error :', error));
   };
 
   useEffect(() => {
@@ -184,64 +188,44 @@ const Home = () => {
             ></Button>
 
             {item.links.map((link) => {
-              if (link.type != 'video/mp4') {
+              if (link.type.substr(0, 5) == 'image') {
                 return (
-                  <>
-                    <Text
-                      key={link.pictureId}
-                      category="p"
-                      style={styles.titre}
-                    >
-                      {link.type}
-                    </Text>
-
-                    <Image
-                      // key={link.pictureId}
-                      style={styles.image}
-                      resizeMode="contain"
-                      source={{
-                        width: 370,
-                        height: (link.height / link.width) * 370,
-                        uri: link.link,
-                      }}
-                    />
-                  </>
+                  <Image
+                    key={link.pictureId}
+                    style={styles.image}
+                    resizeMode="contain"
+                    source={{
+                      width: 370,
+                      height: (link.height / link.width) * 370,
+                      uri: link.link,
+                    }}
+                  />
                 );
               } else {
                 return (
-                  <>
-                    <Text
-                      key={link.pictureId}
-                      category="p"
-                      style={styles.titre}
-                    >
-                      {link.type}
-                    </Text>
-
-                    <Video
-                      // key={link.pictureId}
-                      source={{
-                        uri: link.link,
-                      }}
-                      rate={1.0}
-                      volume={1.0}
-                      resizeMode="contain"
-                      useNativeControls={true}
-                      shouldPlay={false}
-                      isMuted={true}
-                      isLooping={true}
-                      // style={styles.image}
-                      style={{
-                        width: 370,
-                        height: 370,
-                        // width: 370,
-                        // height: (link.height / link.width) * 370,
-                        marginTop: 30,
-                        marginBottom: 10,
-                        borderRadius: 5,
-                      }}
-                    />
-                  </>
+                  <Video
+                    key={link.pictureId}
+                    source={{
+                      uri: link.link,
+                    }}
+                    rate={1.0}
+                    volume={1.0}
+                    resizeMode="contain"
+                    useNativeControls={true}
+                    shouldPlay={false}
+                    isMuted={false}
+                    isLooping={true}
+                    // style={styles.image}
+                    style={{
+                      // width: 370,
+                      // height: 370,
+                      width: 370,
+                      height: (link.height / link.width) * 370,
+                      marginTop: 30,
+                      marginBottom: 10,
+                      borderRadius: 5,
+                    }}
+                  />
                 );
               }
             })}

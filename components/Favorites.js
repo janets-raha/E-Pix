@@ -15,7 +15,7 @@ const Favorites = (props) => {
     } else {
       setFavs([]);
     }
-    console.log('useeffect');
+    // console.log('useeffect');
   }, [props]);
 
   const getFav = (token) => {

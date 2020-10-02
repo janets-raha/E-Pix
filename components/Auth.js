@@ -75,7 +75,7 @@ export default function Auth(props) {
   };
 
   const onLoggedInChange = (status) => {
-    console.log('quth loged chag', status, props);
+    // console.log('quth loged chag', status, props);
     //props.onLoggedInChange;
   };
 

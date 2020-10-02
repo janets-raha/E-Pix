@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import { Layout, Tab, TabView, Text } from "@ui-kitten/components";
-import Favorites from "./Favorites";
-import MyPosts from "./MyPosts";
-import Home from "./Home";
-import NavBar from "./NavBar";
-import Search from "./Search";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { Layout, Tab, TabView, Text } from '@ui-kitten/components';
+import Favorites from './Favorites';
+import MyPosts from './MyPosts';
+import Home from './Home';
+import NavBar from './NavBar';
+import Search from './Search';
 
 const Navigation = () => {
   const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -16,18 +16,18 @@ const Navigation = () => {
 
   const getAuthFromCache = async () => {
     try {
-      const cachedAuth = await AsyncStorage.getItem("auth");
-      console.log("xxxauth", JSON.parse(cachedAuth));
+      const cachedAuth = await AsyncStorage.getItem('auth');
+      // console.log("xxxauth", JSON.parse(cachedAuth));
       return JSON.parse(cachedAuth);
     } catch (e) {
-      alert("Issue get auth from cache in Navigation");
+      alert('Issue get auth from cache in Navigation');
     }
   };
 
   useEffect(() => {
     (async () => {
       let cachedAuth = await getAuthFromCache();
-      console.log("Auth get from cache in Navigation", cachedAuth);
+      // console.log("Auth get from cache in Navigation", cachedAuth);
       setToken(cachedAuth ? cachedAuth.access_token : null);
     })();
   }, [loggedIn]);
@@ -62,9 +62,9 @@ const Navigation = () => {
 
 const styles = StyleSheet.create({
   tabContainer: {
-    minHeight: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+    minHeight: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
