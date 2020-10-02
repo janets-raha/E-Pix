@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, ScrollView, StyleSheet, FlatList, View } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import { authAsync } from "expo-app-auth";
+import { Image, StyleSheet, FlatList, View } from "react-native";
 import { Button, Layout, Text, Icon } from '@ui-kitten/components';
 
 
@@ -16,7 +14,6 @@ const Favorites = (props) => {
     } else {
       setFavs([]);
     }
-    console.log("useeffect");
   }, [props]);
 
   const getFav = (token) => {
@@ -40,13 +37,8 @@ const Favorites = (props) => {
   const CrossIcon = (props) => <Icon {...props} name="close" width={30} height={30} />;
 
   const removeFav = (favId) => {
-    console.log("ID = ", favId)
-    console.log(auth.access_token)
-    //if (!token && auth) token = auth.access_token;
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + auth.access_token);
-
-
+    myHeaders.append("Authorization", "Bearer " + props.token);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -54,7 +46,7 @@ const Favorites = (props) => {
     };
     fetch('https://api.imgur.com/3/album/' + favId + '/favorite', requestOptions)
       .then(response => response.json())
-      .then(result => { getFav(auth.access_token) })
+      .then(result => { getFav(props.token) })
       .catch(error => console.log('error', error));
   }
 
@@ -107,20 +99,38 @@ const Favorites = (props) => {
 };
 
 const styles = StyleSheet.create({
+  /* imgContainer: {
+     display: "flex",
+     flexDirection: "column",
+     alignItems: "center",
+     justifyContent: "center",
+     marginBottom: 30,
+   },*/
   imgContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 30,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 5,
+    marginTop: 5,
+    marginBottom: 25,
+    borderWidth: 2,
+    borderColor: '#e9e9e2',
+    borderRadius: 10,
   },
   image: {
     borderWidth: 1,
     borderColor: "black",
     margin: 10,
   },
-  titre: {
+  /*titre: {
     textAlign: "center",
+  },*/
+  titre: {
+    fontSize: 25,
+    marginTop: 10,
+    color: '#e9e9e2',
+    textAlign: 'center',
   },
   container: {
     minHeight: "100%",

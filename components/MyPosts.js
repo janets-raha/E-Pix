@@ -56,15 +56,18 @@ const MyPosts = () => {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      base64: true,
-      allowsEditing: true,
+      //base64: true,
+      //allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      exif: true,
     });
-    if (!result.cancelled) {
-      setImage(result.base64);
+    console.log(result)
+    /*if (!result.cancelled) {
+      
+      //setImage(result.base64);
       //uploadImage(result.base64)
-    }
+    }*/
   };
 
   const handleChange = (event) => {
@@ -189,26 +192,6 @@ const MyPosts = () => {
         }}
       />
 
-      {/* <ScrollView>
-        <View style={styles.imgContainer}>
-          {allPosts.map((post) => {
-            return (
-              <View key={post.id} style={styles.imgContainer}>
-                <Text category="h3">{post.title}</Text>
-                <Image
-                  resizeMode="contain"
-                  style={styles.image}
-                  source={{
-                    width: 370,
-                    height: (post.height / post.width) * 370,
-                    uri: post.link,
-                  }}
-                />
-              </View>
-            );
-          })}
-        </View>
-        </ScrollView> */}
     </Layout>
   );
 };
