@@ -127,8 +127,16 @@ const Home = () => {
               if (link.type != 'video/mp4') {
                 return (
                   <>
-                    <Image
+                    <Text
                       key={link.pictureId}
+                      category="p"
+                      style={styles.titre}
+                    >
+                      {link.type}
+                    </Text>
+
+                    <Image
+                      // key={link.pictureId}
                       style={styles.image}
                       resizeMode="contain"
                       source={{
@@ -137,17 +145,21 @@ const Home = () => {
                         uri: link.link,
                       }}
                     />
-                    <Text category="p" style={styles.titre}>
-                      {link.type}
-                    </Text>
                   </>
                 );
               } else {
                 return (
                   <>
-                    <Video
+                    <Text
                       key={link.pictureId}
-                      style={styles.image}
+                      category="p"
+                      style={styles.titre}
+                    >
+                      {link.type}
+                    </Text>
+
+                    <Video
+                      // key={link.pictureId}
                       source={{
                         uri: link.link,
                       }}
@@ -156,13 +168,20 @@ const Home = () => {
                       isMuted={true}
                       resizeMode="contain"
                       useNativeControls={true}
+                      showFullscreenButton={false}
                       shouldPlay={true}
                       isLooping={true}
-                      style={{ width: 300, height: 300 }}
+                      // style={styles.image}
+                      style={{
+                        width: 370,
+                        height: 370,
+                        // width: 370,
+                        // height: (link.height / link.width) * 370,
+                        marginTop: 30,
+                        marginBottom: 10,
+                        borderRadius: 5,
+                      }}
                     />
-                    <Text category="p" style={styles.titre}>
-                      {link.type}
-                    </Text>
                   </>
                 );
               }
@@ -191,6 +210,8 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 10,
     borderRadius: 5,
+    // width: 370,
+    // height: (link.height / link.width) * 370,
   },
   titre: {
     fontSize: 20,
