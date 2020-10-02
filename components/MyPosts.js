@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Image, ScrollView, StyleSheet, FlatList, View } from "react-native";
+import { Image, StyleSheet, FlatList, View } from "react-native";
 import { Layout, Text, Button, Icon, Input } from "@ui-kitten/components";
 import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-community/async-storage";
+
 
 const MyPosts = (props) => {
   const [fix, setFix] = useState(true);
@@ -114,7 +114,7 @@ const MyPosts = (props) => {
     fetch("https://api.imgur.com/3/upload", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log("retour upload", result);
+        //console.log("retour upload", result);
         getPosts();
         setImage(null);
       })
@@ -333,6 +333,19 @@ const styles = StyleSheet.create({
     //marginBottom: 5,
     borderWidth: 0,
     borderRadius: 100,
+  },
+  inputGrp: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  input: {
+    width: '85%',
+  },
+  buttonOk: {
+    height: 50,
   },
   favHeart: {
     position: "absolute",

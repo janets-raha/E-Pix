@@ -119,7 +119,7 @@ const Home = (props) => {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
+        //console.log(result);
       })
       .catch((error) => console.log('error', error));
   };
@@ -127,7 +127,6 @@ const Home = (props) => {
 
   const updatePosts = (posts) => {
     setPosts(posts);
-    console.log(posts.length);
   }
 
   const resetPictures = () => {

@@ -125,11 +125,13 @@ const Favorites = (props) => {
             })}
             appearance="outline"
             onPress={() => {
-              backToTop.current.scrollToIndex({ index: 0 });
+              if (allFavs.length)
+                backToTop.current.scrollToIndex({ index: 0 });
             }}
             status="warning"
           ></Button>
           <FlatList
+            ref={backToTop}
             style={styles.flatlist}
             onRefresh={getFav}
             refreshing={loading}
