@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Image, ScrollView, StyleSheet, FlatList, View } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import { authAsync } from "expo-app-auth";
+import React, { useState, useEffect } from 'react';
+import { Image, ScrollView, StyleSheet, FlatList, View } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { authAsync } from 'expo-app-auth';
 import { Button, Layout, Text, Icon } from '@ui-kitten/components';
-
 
 const Favorites = (props) => {
   const [fix, setFix] = useState(true);
@@ -16,47 +15,52 @@ const Favorites = (props) => {
     } else {
       setFavs([]);
     }
-    console.log("useeffect");
+    console.log('useeffect');
   }, [props]);
 
   const getFav = (token) => {
     if (!token) token = props.token;
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + token);
+    myHeaders.append('Authorization', 'Bearer ' + token);
     var requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: myHeaders,
-      redirect: "follow",
+      redirect: 'follow',
     };
     fetch(
-      "https://api.imgur.com/3/account/me/gallery_favorites",
+      'https://api.imgur.com/3/account/me/gallery_favorites',
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => setFavs(result.data))
-      .catch((error) => alert("Issue fetching favorites: ", error));
+      .catch((error) => alert('Issue fetching favorites: ', error));
   };
 
-  const CrossIcon = (props) => <Icon {...props} name="close" width={30} height={30} />;
+  const CrossIcon = (props) => (
+    <Icon {...props} name="close" width={30} height={30} />
+  );
 
   const removeFav = (favId) => {
-    console.log("ID = ", favId)
-    console.log(auth.access_token)
-    //if (!token && auth) token = auth.access_token;
+    console.log('ID = ', favId);
+    console.log(props.token);
+    //if (!token && auth) token = props.token;
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + auth.access_token);
-
+    myHeaders.append('Authorization', 'Bearer ' + props.token);
 
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
-
     };
-    fetch('https://api.imgur.com/3/album/' + favId + '/favorite', requestOptions)
-      .then(response => response.json())
-      .then(result => { getFav(auth.access_token) })
-      .catch(error => console.log('error', error));
-  }
+    fetch(
+      'https://api.imgur.com/3/album/' + favId + '/favorite',
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        getFav(props.token);
+      })
+      .catch((error) => console.log('error', error));
+  };
 
   return (
     <Layout>
@@ -101,34 +105,35 @@ const Favorites = (props) => {
               </View>
             );
           }}
-        />)}
+        />
+      )}
     </Layout>
   );
 };
 
 const styles = StyleSheet.create({
   imgContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 30,
   },
   image: {
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: 'black',
     margin: 10,
   },
   titre: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   container: {
-    minHeight: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+    minHeight: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   button: {
-    position: "absolute",
+    position: 'absolute',
     backgroundColor: 'rgba(219, 0, 0, 0.78)',
     opacity: 0.5,
     height: 20,
@@ -139,7 +144,7 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
   flatlist: {
-    marginBottom: 60
-  }
+    marginBottom: 60,
+  },
 });
 export default Favorites;

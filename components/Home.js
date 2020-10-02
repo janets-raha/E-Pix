@@ -225,11 +225,10 @@ const Home = () => {
                       }}
                       rate={1.0}
                       volume={1.0}
-                      isMuted={true}
                       resizeMode="contain"
                       useNativeControls={true}
-                      showFullscreenButton={false}
-                      shouldPlay={true}
+                      shouldPlay={false}
+                      isMuted={true}
                       isLooping={true}
                       // style={styles.image}
                       style={{
