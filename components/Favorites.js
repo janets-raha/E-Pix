@@ -107,19 +107,37 @@ const Favorites = (props) => {
 };
 
 const styles = StyleSheet.create({
+  /* imgContainer: {
+     display: "flex",
+     flexDirection: "column",
+     alignItems: "center",
+     justifyContent: "center",
+     marginBottom: 30,
+   },*/
   imgContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 30,
+    marginHorizontal: 5,
+    marginTop: 5,
+    marginBottom: 25,
+    borderWidth: 2,
+    borderColor: '#e9e9e2',
+    borderRadius: 10,
   },
   image: {
     borderWidth: 1,
     borderColor: 'black',
     margin: 10,
   },
+  /*titre: {
+    textAlign: "center",
+  },*/
   titre: {
+    fontSize: 25,
+    marginTop: 10,
+    color: '#e9e9e2',
     textAlign: 'center',
   },
   container: {
