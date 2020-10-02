@@ -46,7 +46,7 @@ const Navigation = () => {
         style={styles.tabContainer}
       >
         <Tab title="HOME">
-          <Home />
+          <Home token={token} />
         </Tab>
         <Tab title="MY PICS">
           <MyPosts token={token} />

@@ -83,7 +83,7 @@ const MyPosts = (props) => {
     });
     if (!result.cancelled) {
       setImage(result.base64);
-      uploadImage(result.base64)
+      //(result.base64)
     }
   };
 
@@ -208,7 +208,6 @@ const MyPosts = (props) => {
                 status="danger"
               />
               <Button style={styles.buttonOk} onPress={uploadImage}>
-                {" "}
                 OK
               </Button>
             </Layout>

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Image, StyleSheet, FlatList, View } from 'react-native';
 import { Button, Layout, Text, Icon } from '@ui-kitten/components';
+import { Video } from 'expo-av';
 
 const Favorites = (props) => {
   const [fix, setFix] = useState(true);
@@ -30,8 +31,53 @@ const Favorites = (props) => {
       requestOptions
     )
       .then((response) => response.json())
-      .then((result) => setFavs(result.data))
+      .then((result) => {
+        let res = [];
+        result.data.forEach((post) => {
+          let tmp = {};
+          tmp.postId = post.id;
+          tmp.title = post.title;
+          tmp.favorite = post.favorite;
+          tmp.links = [];
+          let arr = [];
+          if (post.images && Array.isArray(post.images)) {
+            post.images.forEach((picture) => {
+              arr.push({
+                pictureId: picture.id,
+                link: picture.link,
+                type: picture.type,
+                width: picture.width,
+                height: picture.height,
+              });
+            });
+            tmp.links = arr;
+          } else {
+            if (true || post.link) {
+              arr.push({
+                pictureId: post.id,
+                link: post.link,
+                type: post.type,
+                width: post.width,
+                height: post.height,
+              });
+            }
+            tmp.links = arr;
+          }
+          res.push(tmp);
+        });
+
+        setFavs(res);
+        setLoading(false);
+        //console.log('FAV:', res);
+      })
+
       .catch((error) => alert('Issue fetching favorites: ', error));
+  };
+  const backToTop = useRef();
+
+  const backToTopIcon = (props) => {
+    // console.log('Icon props :', props);
+    return <Icon {...props} name="arrow-circle-up-outline" />;
   };
 
   const CrossIcon = (props) => (
@@ -65,45 +111,93 @@ const Favorites = (props) => {
         </View>
       )}
       {props.token && (
-        <FlatList
-          style={styles.flatlist}
-          onRefresh={getFav}
-          refreshing={loading}
-          keyExtractor={(item) => item.id}
-          data={allFavs}
-          renderItem={({ item }) => {
-            return (
-              <View key={item.id} style={styles.imgContainer}>
-                <Text category="h3" style={styles.titre}>
-                  {item.title}
-                </Text>
-                <Button
-                  id={item.id}
-                  style={styles.button}
-                  accessoryRight={CrossIcon}
-                  onPress={removeFav.bind(this, item.id)}
-                ></Button>
-                {item.images.map((img) => {
-                  return (
-                    <Image
-                      key={img.id}
-                      style={styles.image}
-                      resizeMode="contain"
-                      source={{
-                        width: 370,
-                        height: (img.height / img.width) * 370,
-                        uri: img.link,
-                      }}
-                    />
-                  );
-                })}
-              </View>
-            );
-          }}
-        />
+        <>
+          <Button
+            title="back to top"
+            style={styles.btt_button}
+            accessoryRight={backToTopIcon.bind(this, {
+              style: {
+                width: 70,
+                height: 70,
+                opacity: 0.75,
+                tintColor: '#F46036',
+              },
+            })}
+            appearance="outline"
+            onPress={() => {
+              backToTop.current.scrollToIndex({ index: 0 });
+            }}
+            status="warning"
+          ></Button>
+          <FlatList
+            style={styles.flatlist}
+            onRefresh={getFav}
+            refreshing={loading}
+            keyExtractor={(item) => item.postId}
+            data={allFavs}
+            renderItem={({ item }) => {
+              return (
+                <View key={item.id} style={styles.imgContainer}>
+                  <Text category="h3" style={styles.titre}>
+                    {item.title}
+                  </Text>
+                  <Button
+                    style={styles.button}
+                    accessoryRight={CrossIcon}
+                    onPress={removeFav.bind(this, item.postId)}
+                  ></Button>
+                  {item.links.map((link) => {
+                    if (link.type.substr(0, 5) == 'image') {
+                      return (
+                        <Image
+                          key={link.pictureId}
+                          style={styles.image}
+                          resizeMode="contain"
+                          source={{
+                            width: 370,
+                            height: (link.height / link.width) * 370,
+                            uri: link.link,
+                          }}
+                        />
+                      );
+                    } else {
+                      return (
+                        <Video
+                          key={link.pictureId}
+                          source={{
+                            uri: link.link,
+                          }}
+                          rate={1.0}
+                          volume={1.0}
+                          resizeMode="contain"
+                          useNativeControls={true}
+                          shouldPlay={false}
+                          isMuted={false}
+                          isLooping={true}
+                          // style={styles.image}
+                          style={{
+                            // width: 370,
+                            // height: 370,
+                            width: 370,
+                            height: (link.height / link.width) * 370,
+                            marginTop: 30,
+                            marginBottom: 10,
+                            borderRadius: 5,
+                          }}
+                        />
+                      );
+                    }
+
+                  })}
+                </View>
+              );
+            }}
+          />
+        </>
       )}
     </Layout>
   );
+
 };
 
 const styles = StyleSheet.create({
@@ -127,15 +221,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   image: {
-    borderWidth: 1,
-    borderColor: 'black',
-    margin: 10,
+    marginTop: 30,
+    marginBottom: 10,
+    borderRadius: 5,
   },
   /*titre: {
     textAlign: "center",
   },*/
   titre: {
-    fontSize: 25,
+    fontSize: 20,
     marginTop: 10,
     color: '#e9e9e2',
     textAlign: 'center',
@@ -144,6 +238,17 @@ const styles = StyleSheet.create({
     minHeight: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  btt_button: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    zIndex: 3,
+    bottom: 35,
+    left: 30,
+    marginBottom: 5,
+    borderWidth: 0,
+    borderRadius: 100,
   },
   button: {
     position: 'absolute',

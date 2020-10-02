@@ -14,11 +14,11 @@ import { Video } from 'expo-av';
 import AsyncStorage from '@react-native-community/async-storage';
 import Search from './Search';
 
-const Home = () => {
+const Home = (props) => {
   const [homePosts, setPosts] = useState([]);
   const [fix, setFix] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [auth, setAuth] = useState(null);
+
 
   const getPictures = () => {
     setLoading(true);
@@ -108,7 +108,7 @@ const Home = () => {
 
   const addFavorites = (favId) => {
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + auth.access_token);
+    myHeaders.append('Authorization', 'Bearer ' + props.token);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -124,28 +124,6 @@ const Home = () => {
       .catch((error) => console.log('error', error));
   };
 
-  const getAuthFromCache = async () => {
-    try {
-      const cachedAuth = await AsyncStorage.getItem('auth');
-      //console.log("auth", JSON.parse(cachedAuth));
-      return JSON.parse(cachedAuth);
-    } catch (e) {
-      // saving error
-    }
-  };
-
-  useEffect(() => {
-    (async () => {
-      let cachedAuth = await getAuthFromCache();
-      if (cachedAuth && !auth) {
-        setAuth(cachedAuth);
-      }
-    })();
-  });
-
-  const getStyle = () => {
-    return styles.favHeart;
-  };
 
   const updatePosts = (posts) => {
     setPosts(posts);

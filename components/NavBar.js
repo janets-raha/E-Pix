@@ -25,7 +25,7 @@ export default function NavBar(props) {
         style={styles.logo}
         source={require('../assets/icon_orange.png')}
       />
-      <Text {...props}>TF4#pixur</Text>
+
     </View>
   );
 
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     color: 'lightblue',
   },
   logo: {
-    width: 42,
-    height: 42,
+    width: 75,
+    height: 40,
   },
 });
