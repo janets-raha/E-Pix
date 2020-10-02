@@ -157,7 +157,8 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
   flatlist: {
-    marginBottom: 60,
+    marginVertical: 10
+
   },
 });
 export default Favorites;

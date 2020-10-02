@@ -159,8 +159,8 @@ const Home = () => {
   return (
     <Layout>
       <Search
-        updatePosts = {updatePosts}
-        resetPictures = {resetPictures}
+        updatePosts={updatePosts}
+        resetPictures={resetPictures}
       />
       <Button
         title="back to top"
@@ -181,6 +181,7 @@ const Home = () => {
       ></Button>
 
       <FlatList
+        style={{ marginBottom: 70 }}
         ref={backToTop}
         onRefresh={getPictures}
         refreshing={loading}

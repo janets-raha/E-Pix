@@ -16,7 +16,7 @@ export default () => (
   <>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.dark}>
-      <SafeAreaView style={{ flex: 1, marginTop: 30, marginBottom: 45 }}>
+      <SafeAreaView style={{ flex: 1, marginTop: 30 }}>
         <Navigation></Navigation>
       </SafeAreaView>
     </ApplicationProvider>

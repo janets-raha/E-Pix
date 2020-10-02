@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Layout, Tab, TabView, Text } from '@ui-kitten/components';
 import Favorites from './Favorites';
@@ -9,7 +9,7 @@ import NavBar from './NavBar';
 import Search from './Search';
 
 const Navigation = () => {
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const [token, setToken] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -38,10 +38,12 @@ const Navigation = () => {
 
   return (
     <>
+
       <NavBar onLoggedInChange={onLoggedInChange} />
       <TabView
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}
+        style={styles.tabContainer}
       >
         <Tab title="HOME">
           <Home />
@@ -53,15 +55,19 @@ const Navigation = () => {
           <Favorites token={token} />
         </Tab>
       </TabView>
+
+
     </>
   );
 };
 
 const styles = StyleSheet.create({
   tabContainer: {
-    minHeight: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    //maxHeight: '100%',
+    flex: 2.1,
+
+    //alignItems: 'center',
+    //justifyContent: 'center',
   },
 });
 

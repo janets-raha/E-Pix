@@ -17,7 +17,7 @@ const MyPosts = (props) => {
     } else {
       getPosts([]);
     }
-    console.log("useeffect");
+    //console.log("useeffect");
   }, [props]);
 
   const getPosts = (token) => {
@@ -215,7 +215,7 @@ const MyPosts = (props) => {
           )}
           <FlatList
             ref={backToTop}
-            style={{ marginTop: 70 }}
+            style={{ marginTop: 10 }}
             onRefresh={getPosts}
             refreshing={loading}
             keyExtractor={(item) => item.postId}
@@ -235,55 +235,48 @@ const MyPosts = (props) => {
                 {item.links.map((link) => {
                   if (link.type != "video/mp4") {
                     return (
-                      <>
-                        <Text key={link.pictureId} style={styles.titre}>
-                          {link.type}
-                        </Text>
 
-                        <Image
-                          // key={link.pictureId}
-                          style={styles.image}
-                          resizeMode="contain"
-                          source={{
-                            width: 370,
-                            height: (link.height / link.width) * 370,
-                            uri: link.link,
-                          }}
-                        />
-                      </>
+                      <Image
+                        key={link.pictureId}
+                        style={styles.image}
+                        resizeMode="contain"
+                        source={{
+                          width: 370,
+                          height: (link.height / link.width) * 370,
+                          uri: link.link,
+                        }}
+                      />
+
                     );
                   } else {
                     return (
-                      <>
-                        <Text key={link.pictureId} style={styles.titre}>
-                          {link.type}
-                        </Text>
 
-                        <Video
-                          // key={link.pictureId}
-                          source={{
-                            uri: link.link,
-                          }}
-                          rate={1.0}
-                          volume={1.0}
-                          isMuted={true}
-                          resizeMode="contain"
-                          useNativeControls={true}
-                          showFullscreenButton={false}
-                          shouldPlay={true}
-                          isLooping={true}
-                          // style={styles.image}
-                          style={{
-                            width: 370,
-                            height: 370,
-                            // width: 370,
-                            // height: (link.height / link.width) * 370,
-                            marginTop: 30,
-                            marginBottom: 10,
-                            borderRadius: 5,
-                          }}
-                        />
-                      </>
+
+                      <Video
+                        key={link.pictureId}
+                        source={{
+                          uri: link.link,
+                        }}
+                        rate={1.0}
+                        volume={1.0}
+                        isMuted={true}
+                        resizeMode="contain"
+                        useNativeControls={true}
+                        showFullscreenButton={false}
+                        shouldPlay={true}
+                        isLooping={true}
+                        // style={styles.image}
+                        style={{
+                          width: 370,
+                          height: 370,
+                          // width: 370,
+                          // height: (link.height / link.width) * 370,
+                          marginTop: 30,
+                          marginBottom: 10,
+                          borderRadius: 5,
+                        }}
+                      />
+
                     );
                   }
                 })}
@@ -299,6 +292,7 @@ const MyPosts = (props) => {
 const styles = StyleSheet.create({
   layout: {
     flex: 1,
+    //marginBottom: 50
   },
   container: {
     minHeight: "100%",
@@ -335,9 +329,9 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     zIndex: 3,
-    bottom: 100,
+    bottom: 35,
     left: 30,
-    marginBottom: 5,
+    //marginBottom: 5,
     borderWidth: 0,
     borderRadius: 100,
   },
@@ -359,7 +353,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     zIndex: 3,
-    bottom: 120,
+    bottom: 35,
     right: 20,
     borderRadius: 60,
     //bottom: 20, // A sensible offset from the edge of the viewport
