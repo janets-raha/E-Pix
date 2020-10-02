@@ -1,56 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { Image, ScrollView, StyleSheet, FlatList, View } from 'react-native';
-import { Layout, Text, Button, Icon, Input } from '@ui-kitten/components';
-import * as ImagePicker from 'expo-image-picker';
-import AsyncStorage from '@react-native-community/async-storage';
-import { authAsync } from 'expo-app-auth';
+import React, { useState, useEffect, useRef } from "react";
+import { Image, ScrollView, StyleSheet, FlatList, View } from "react-native";
+import { Layout, Text, Button, Icon, Input } from "@ui-kitten/components";
+import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-community/async-storage";
 
-const MyPosts = () => {
+const MyPosts = (props) => {
   const [fix, setFix] = useState(true);
   const [allPosts, setPosts] = useState([]);
   const [image, setImage] = useState(null);
   const [imageTitle, setImageTitle] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [auth, setAuth] = useState(null);
-
-  const getAuthFromCache = async () => {
-    try {
-      const cachedAuth = await AsyncStorage.getItem('auth');
-      //console.log("auth", JSON.parse(cachedAuth));
-      return JSON.parse(cachedAuth);
-    } catch (e) {
-      // saving error
-    }
-  };
 
   useEffect(() => {
-    (async () => {
-      let cachedAuth = await getAuthFromCache();
-      //console.log("cachedAuth", cachedAuth);
-      if (cachedAuth && !auth) {
-        setAuth(cachedAuth);
-        getPosts(cachedAuth.access_token);
-      }
-    })();
-  });
-
+    if (props.token) {
+      getPosts(props.token);
+    } else {
+      getPosts([]);
+    }
+    console.log("useeffect");
+  }, [props]);
 
   const getPosts = (token) => {
-    if (!token && auth) token = auth.access_token;
+    if (!token) token = props.token;
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + token);
-    // myHeaders.append("Cookie", "amplitude_id_f1fc2abcb6d136bd4ef338e7fc0b9d05imgur.com=eyJkZXZpY2VJZCI6ImJmN2JkY2NjLWU1YTUtNGRhMy1iYTExLTNhMDUxNGVlMWEwYVIiLCJ1c2VySWQiOm51bGwsIm9wdE91dCI6ZmFsc2UsInNlc3Npb25JZCI6MTYwMTMxNjM0ODI0NywibGFzdEV2ZW50VGltZSI6MTYwMTMxNjM0ODI1MywiZXZlbnRJZCI6MCwiaWRlbnRpZnlJZCI6Miwic2VxdWVuY2VOdW1iZXIiOjJ9; IMGURUIDJAFO=ae72212599015021f8bf926835b4329e4a44d8aeb6f10f5e7673fc9ee77ea007; SESSIONDATA=%7B%22sessionCount%22%3A1%2C%22sessionTime%22%3A1601316348367%7D; _ga=GA1.2.154282965.1601316348; _gid=GA1.2.1129595793.1601316348; __auc=57059161174d5e4627c31a8a32f; _fbp=fb.1.1601316348853.519716243; addtl_consent=1~39.4.3.9.6.5.4.13.6.4.15.9.5.2.7.4.1.7.1.3.2.10.3.5.4.13.8.4.6.9.7.10.2.9.2.12.6.7.6.14.5.20.6.5.1.3.1.11.29.4.14.4.4.1.3.10.6.2.9.6.6.4.5.3.1.4.29.4.5.3.1.6.2.2.17.1.17.10.9.1.8.3.3.2.8.1.2.1.3.142.4.8.35.7.15.1.14.3.1.8.10.14.11.3.7.25.5.18.9.7.41.2.4.18.21.3.4.2.1.6.6.5.2.14.18.7.3.2.2.8.19.1.8.8.6.3.10.4.5.15.2.4.9.3.1.6.4.11.1.3.18.4.16.2.6.8.2.4.11.6.5.5.12.16.11.8.1.10.28.8.4.1.3.21.2.7.6.1.9.30.17.4.9.15.8.7.3.6.6.7.2.4.1.7.12.10.3.22.13.2.12.2.4.6.1.4.15.2.4.9.4.5.1.3.7.13.5.3.12.4.13.4.14.8.2.15.2.5.5.1.2.2.1.1.1.14.7.4.8.2.9.9.1.18.12.13.2.18.1.1.3.1.1.9.20.5.4.6.14.8.4.5.3.5.4.8.4.2.2.2.14.2.13.4.2.6.9.6.3.4.3.5.2.3.6.10.11.2.4.3.16.3.8.3.3.1.2.3.9.19.11.15.3.10.7.6.4.3.4.9.3.3.3.1.1.1.6.11.3.1.1.7.4.3.3.1.10.5.2.6.3.2.1.1.4.3.2.2.7.2.13.7.12.2.1.6.4.5.4.3.2.2.4.1.3.1.1.1.5.6.1.6.9.1.4.1.2.1.7.2.8.3.8.1.3.1.1.2.1.3.2.6.1.5.6.1.5.3.1.3.1.1.2.2.7.7.1.4.1.2.6.1.2.1.1.3.1.1.4.1.1.2.1.8.1.3.4.4.1.2.2.1.3.1.4.3.9.6.1.15.10.28.1.2.1.1.12.3.4.1.5.1.3.4.7.1.3.1.1.3.1.5.3.1.3.2.2.1.1.4.2.1.2.1.1.1.2.2.4.2.1.2.2.2.4.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.2.1.1.2.1.2.1.7.1.2.1.1.1.2.1.1.1.1.2.1.1.3.2.1.1.2.6.1.1.1.5.2.1.6.5.1.1.1.1.1.2.1.1.3.1.1.4.1.1.2.2.1.1.4.2.1.1.2.3.2.1.2.3.1.1.1.1.4.1.1.1.5.1.8.1.3.1.5.1.1.3.2.1.1.1.2.3.1.4.2.1.2.2.2.1.1.1.1.1.1.11.1.3.1.1.2.2.1.4.2.2.1.2.1.4.1.1.1.1.1.3.2.1.1.2.5.1.3.6.4.1.1.3.1.4.3.1.2.2.5.1.7.4.1.2.1.1.1.4.2.1; euconsent-v2=CO6dXvgO6dXvgAKANAENA5CsAP_AAH_AAAwIGvNd_X_fb2_j-_5999t0eY1f9_6_v2wzjgeds-8Nyd_X_L8X62MyvB36pq4KuR4Eu3LBAQFlHOHcTQmQ4IkVqTLsbk2Mq7NKJ7LEilMbM2dYGHtPn9XTuZKY707s___z_3-_-___77f_r-3_3_A14Akw1L4CDMSxgJJo0qhRAhCuJDoAQAUUIwtElhASuCnZXAR6ggQAIDUBGBECDEFGLIIAAAAAkoiAEgPBAIgCIBAACAFaAhAARIAgsAJAwCAAUA0LACKIJQJCDI4KjlECAqRaKCeSMCSC52MMIAAA.f_gAAAAAAAAA; accesstoken=b62cd374fe5874b65349c8b237069f77256db662; is_authed=1");
+    myHeaders.append("Authorization", "Bearer " + token);
+
     var requestOptions = {
-      method: 'GET',
+      method: "GET",
       headers: myHeaders,
-      redirect: 'follow',
+      redirect: "follow",
     };
-    fetch('https://api.imgur.com/3/account/me/images', requestOptions)
+    fetch("https://api.imgur.com/3/account/me/images", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setPosts(result.data);
+        let res = [];
+        result.data.forEach((post) => {
+          let tmp = {};
+          tmp.postId = post.id;
+          tmp.title = post.title;
+          tmp.favorite = post.favorite;
+          tmp.links = [];
+          let arr = [];
+          if (post.images && Array.isArray(post.images)) {
+            post.images.forEach((picture) => {
+              arr.push({
+                pictureId: picture.id,
+                link: picture.link,
+                type: picture.type,
+                width: picture.width,
+                height: picture.height,
+              });
+            });
+            tmp.links = arr;
+          } else {
+            if (true || post.link) {
+              arr.push({
+                pictureId: post.id,
+                link: post.link,
+                type: post.type,
+                width: post.width,
+                height: post.height,
+              });
+            }
+            tmp.links = arr;
+          }
+          res.push(tmp);
+        });
+
+        setPosts(res);
+        setLoading(false);
       })
-      .catch((error) => console.log('error', error));
+      .catch((error) => console.log("error", error));
   };
 
   const pickImage = async () => {
@@ -74,187 +94,257 @@ const MyPosts = () => {
   const uploadImage = () => {
     var myHeaders = new Headers();
     myHeaders.append(
-      'Authorization',
-      'Bearer ' + auth.access_token,
+      "Authorization",
+      "Bearer " + props.token
       // 'Bearer 5eeae49394cd929e299785c8805bd168fc675280'
     );
 
     var formdata = new FormData();
-    formdata.append('type', 'base64');
-    formdata.append('title', imageTitle);
-    formdata.append('image', image);
+    formdata.append("type", "base64");
+    formdata.append("title", imageTitle);
+    formdata.append("image", image);
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: formdata,
-      redirect: 'follow',
+      redirect: "follow",
     };
 
-    fetch('https://api.imgur.com/3/upload', requestOptions)
+    fetch("https://api.imgur.com/3/upload", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log('retour upload', result);
+        console.log("retour upload", result);
         getPosts();
         setImage(null);
       })
-      .catch((error) => console.log('error', error));
+      .catch((error) => console.log("error", error));
   };
 
-  const CloudIcon = (props) => <Icon {...props} name="cloud-upload" width={40} height={40} />;
-  const CrossIcon = (props) => <Icon {...props} name="close" width={30} height={30} />;
+  const CloudIcon = (props) => (
+    <Icon {...props} name="cloud-upload" width={40} height={40} />
+  );
+  const CrossIcon = (props) => (
+    <Icon {...props} name="close" width={30} height={30} />
+  );
 
   const removePost = (postId) => {
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + auth.access_token);
-    //myHeaders.append("Cookie", "addtl_consent=1~39.4.3.9.6.5.4.13.6.4.15.9.5.2.7.4.1.7.1.3.2.10.3.5.4.13.8.4.6.9.7.10.2.9.2.12.6.7.6.14.5.20.6.5.1.3.1.11.29.4.14.4.4.1.3.10.6.2.9.6.6.4.5.3.1.4.29.4.5.3.1.6.2.2.17.1.17.10.9.1.8.3.3.2.8.1.2.1.3.142.4.8.35.7.15.1.14.3.1.8.10.14.11.3.7.25.5.18.9.7.41.2.4.18.21.3.4.2.1.6.6.5.2.14.18.7.3.2.2.8.19.1.8.8.6.3.10.4.5.15.2.4.9.3.1.6.4.11.1.3.18.4.16.2.6.8.2.4.11.6.5.5.12.16.11.8.1.10.28.8.4.1.3.21.2.7.6.1.9.30.17.4.9.15.8.7.3.6.6.7.2.4.1.7.12.10.3.22.13.2.12.2.4.6.1.4.15.2.4.9.4.5.1.3.7.13.5.3.12.4.13.4.14.8.2.15.2.5.5.1.2.2.1.1.1.14.7.4.8.2.9.9.1.18.12.13.2.18.1.1.3.1.1.9.20.5.4.6.14.8.4.5.3.5.4.8.4.2.2.2.14.2.13.4.2.6.9.6.3.4.3.5.2.3.6.10.11.2.4.3.16.3.8.3.3.1.2.3.9.19.11.15.3.10.7.6.4.3.4.9.3.3.3.1.1.1.6.11.3.1.1.7.4.3.3.1.10.5.2.6.3.2.1.1.4.3.2.2.7.2.13.7.12.2.1.6.4.5.4.3.2.2.4.1.3.1.1.1.5.6.1.6.9.1.4.1.2.1.7.2.8.3.8.1.3.1.1.2.1.3.2.6.1.5.6.1.5.3.1.3.1.1.2.2.7.7.1.4.1.2.6.1.2.1.1.3.1.1.4.1.1.2.1.8.1.3.4.4.1.2.2.1.3.1.4.3.9.6.1.15.10.28.1.2.1.1.12.3.4.1.5.1.3.4.7.1.3.1.1.3.1.5.3.1.3.2.2.1.1.4.2.1.2.1.1.1.2.2.4.2.1.2.2.2.4.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.2.1.1.2.1.2.1.7.1.2.1.1.1.2.1.1.1.1.2.1.1.3.2.1.1.2.6.1.1.1.5.2.1.6.5.1.1.1.1.1.2.1.1.3.1.1.4.1.1.2.2.1.1.4.2.1.1.2.3.2.1.2.3.1.1.1.1.4.1.1.1.5.1.8.1.3.1.5.1.1.3.2.1.1.1.2.3.1.4.2.1.2.2.2.1.1.1.1.1.1.11.1.3.1.1.2.2.1.4.2.2.1.2.1.4.1.1.1.1.1.3.2.1.1.2.5.1.3.6.4.1.1.3.1.4.3.1.2.2.5.1.7.4.1.2.1.1.1.4.2.1; euconsent-v2=CO6dXvgO6dXvgAKANAENA5CsAP_AAH_AAAwIGvNd_X_fb2_j-_5999t0eY1f9_6_v2wzjgeds-8Nyd_X_L8X62MyvB36pq4KuR4Eu3LBAQFlHOHcTQmQ4IkVqTLsbk2Mq7NKJ7LEilMbM2dYGHtPn9XTuZKY707s___z_3-_-___77f_r-3_3_A14Akw1L4CDMSxgJJo0qhRAhCuJDoAQAUUIwtElhASuCnZXAR6ggQAIDUBGBECDEFGLIIAAAAAkoiAEgPBAIgCIBAACAFaAhAARIAgsAJAwCAAUA0LACKIJQJCDI4KjlECAqRaKCeSMCSC52MMIAAA.f_gAAAAAAAAA; retina=1");
+    myHeaders.append("Authorization", "Bearer " + props.token);
 
     var requestOptions = {
-      method: 'DELETE',
+      method: "DELETE",
       headers: myHeaders,
-      redirect: 'follow'
+      redirect: "follow",
     };
 
     fetch("https://api.imgur.com/3/image/" + postId, requestOptions)
-      .then(response => response.text())
-      .then(result => getPosts(auth.access_token))
-      .catch(error => console.log('error', error));
-  }
+      .then((response) => response.text())
+      .then((result) => getPosts(props.token))
+      .catch((error) => console.log("error", error));
+  };
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS !== 'web') {
+      if (Platform.OS !== "web") {
         const {
           status,
         } = await ImagePicker.requestCameraRollPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
         }
       }
     })();
   }, [fix]);
 
+  const backToTop = useRef();
+
+  const backToTopIcon = (props) => {
+    // console.log('Icon props :', props);
+    return <Icon {...props} name="arrow-circle-up-outline" />;
+  };
+
   return (
-    <Layout>
-      <Button
-        style={styles.button}
-        accessoryRight={CloudIcon}
-        onPress={pickImage}
-        status="success"
-      ></Button>
-
-      {image && (
-        <Layout style={styles.inputGrp}>
-          <Input
-            size="large"
-            style={styles.input}
-            onChangeText={handleChange}
-            placeholder="Indiquer le titre de l'image"
-            status="danger"
-          />
-          <Button style={styles.buttonOk} onPress={uploadImage}>
-            {' '}
-            OK
-          </Button>
-        </Layout>
-      )}
-
-      <FlatList
-        style={styles.flatlist}
-        onRefresh={getPosts}
-        refreshing={loading}
-        keyExtractor={(item) => item.id}
-        data={allPosts}
-        renderItem={({ item }) => {
-          return (
-            <View key={item.id} style={styles.imgContainer}>
-              <Text category="h3">{item.title}</Text>
-              <Button
-                id={item.id}
-                style={styles.delete}
-                accessoryRight={CrossIcon}
-                onPress={removePost.bind(this, item.id)}
-              ></Button>
-              <Image
-                resizeMode="contain"
-                style={styles.image}
-                source={{
-                  width: 370,
-                  height: (item.height / item.width) * 370,
-                  uri: item.link,
-                }}
-              />
-            </View>
-          );
-        }}
-      />
-
-      {/* <ScrollView>
-        <View style={styles.imgContainer}>
-          {allPosts.map((post) => {
-            return (
-              <View key={post.id} style={styles.imgContainer}>
-                <Text category="h3">{post.title}</Text>
-                <Image
-                  resizeMode="contain"
-                  style={styles.image}
-                  source={{
-                    width: 370,
-                    height: (post.height / post.width) * 370,
-                    uri: post.link,
-                  }}
-                />
-              </View>
-            );
-          })}
+    <Layout style={styles.layout}>
+      {!props.token && (
+        <View style={styles.container}>
+          <Text category="h4">Please login...</Text>
         </View>
-        </ScrollView> */}
+      )}
+      {props.token && (
+        <>
+          <Button
+            title="back to top"
+            style={styles.btt_button}
+            accessoryRight={backToTopIcon.bind(this, {
+              style: {
+                width: 70,
+                height: 70,
+                opacity: 0.75,
+                tintColor: "#F46036",
+              },
+            })}
+            appearance="outline"
+            onPress={() => {
+              if (allPosts.length)
+                backToTop.current.scrollToIndex({ index: 0 });
+            }}
+            status="warning"
+          ></Button>
+          <Button
+            style={styles.button}
+            accessoryRight={CloudIcon}
+            onPress={pickImage}
+            status="success"
+          ></Button>
+
+          {image && (
+            <Layout style={styles.inputGrp}>
+              <Input
+                size="large"
+                style={styles.input}
+                onChangeText={handleChange}
+                placeholder="Indiquer le titre de l'image"
+                status="danger"
+              />
+              <Button style={styles.buttonOk} onPress={uploadImage}>
+                {" "}
+                OK
+              </Button>
+            </Layout>
+          )}
+          <FlatList
+            ref={backToTop}
+            style={{ marginTop: 70 }}
+            onRefresh={getPosts}
+            refreshing={loading}
+            keyExtractor={(item) => item.postId}
+            data={allPosts}
+            renderItem={({ item }) => (
+              <View style={styles.imgContainer}>
+                <Text category="h3" style={styles.titre}>
+                  {item.title}
+                </Text>
+                <Button
+                  id={item.id}
+                  style={styles.delete}
+                  accessoryRight={CrossIcon}
+                  onPress={removePost.bind(this, item.postId)}
+                ></Button>
+
+                {item.links.map((link) => {
+                  if (link.type != "video/mp4") {
+                    return (
+                      <>
+                        <Text key={link.pictureId} style={styles.titre}>
+                          {link.type}
+                        </Text>
+
+                        <Image
+                          // key={link.pictureId}
+                          style={styles.image}
+                          resizeMode="contain"
+                          source={{
+                            width: 370,
+                            height: (link.height / link.width) * 370,
+                            uri: link.link,
+                          }}
+                        />
+                      </>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <Text key={link.pictureId} style={styles.titre}>
+                          {link.type}
+                        </Text>
+
+                        <Video
+                          // key={link.pictureId}
+                          source={{
+                            uri: link.link,
+                          }}
+                          rate={1.0}
+                          volume={1.0}
+                          isMuted={true}
+                          resizeMode="contain"
+                          useNativeControls={true}
+                          showFullscreenButton={false}
+                          shouldPlay={true}
+                          isLooping={true}
+                          // style={styles.image}
+                          style={{
+                            width: 370,
+                            height: 370,
+                            // width: 370,
+                            // height: (link.height / link.width) * 370,
+                            marginTop: 30,
+                            marginBottom: 10,
+                            borderRadius: 5,
+                          }}
+                        />
+                      </>
+                    );
+                  }
+                })}
+              </View>
+            )}
+          />
+        </>
+      )}
     </Layout>
   );
 };
 
 const styles = StyleSheet.create({
-  imgContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 30,
+  layout: {
+    flex: 1,
   },
-  button: {
-    position: 'absolute',
-    backgroundColor: 'rgba(51, 139, 255, 0.67)',
-    height: 60,
-    width: 60,
-    zIndex: 3,
-    bottom: 120,
-    right: 20,
-    borderRadius: 60,
-    //bottom: 20, // A sensible offset from the edge of the viewport
+  container: {
+    minHeight: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  imgContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 5,
+    marginTop: 5,
+    marginBottom: 25,
+    borderWidth: 2,
+    borderColor: "#e9e9e2",
+    borderRadius: 10,
   },
   image: {
-    borderWidth: 1,
-    borderColor: 'black',
+    marginTop: 30,
+    marginBottom: 10,
+    borderRadius: 5,
+    // width: 370,
+    // height: (link.height / link.width) * 370,
   },
-  inputGrp: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  titre: {
+    fontSize: 20,
     marginTop: 10,
+    color: "#e9e9e2",
+    textAlign: "center",
   },
-  input: {
-    width: '85%',
-  },
-  buttonOk: {
-    height: 50,
-  },
-  flatlist: {
-    marginBottom: 100
-  },
-  delete: {
+  btt_button: {
     position: "absolute",
-    backgroundColor: 'rgba(219, 0, 0, 0.78)',
+    width: 60,
+    height: 60,
+    zIndex: 3,
+    bottom: 100,
+    left: 30,
+    marginBottom: 5,
+    borderWidth: 0,
+    borderRadius: 100,
+  },
+  favHeart: {
+    position: "absolute",
+    backgroundColor: "transparent",
+    borderColor: "transparent",
     opacity: 0.5,
     height: 20,
     width: 20,
@@ -263,9 +353,28 @@ const styles = StyleSheet.create({
     bottom: 30,
     borderRadius: 60,
   },
-
+  button: {
+    position: "absolute",
+    backgroundColor: "rgba(51, 139, 255, 0.67)",
+    height: 60,
+    width: 60,
+    zIndex: 3,
+    bottom: 120,
+    right: 20,
+    borderRadius: 60,
+    //bottom: 20, // A sensible offset from the edge of the viewport
+  },
+  delete: {
+    position: "absolute",
+    backgroundColor: "rgba(219, 0, 0, 0.78)",
+    opacity: 0.5,
+    height: 20,
+    width: 20,
+    zIndex: 3,
+    right: 20,
+    bottom: 30,
+    borderRadius: 60,
+  },
 });
 
 export default MyPosts;
-
-//{image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}

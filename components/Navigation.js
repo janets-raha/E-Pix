@@ -50,7 +50,7 @@ const Navigation = () => {
           <Home />
         </Tab>
         <Tab title="MY PICS">
-          <MyPosts />
+          <MyPosts token={token} />
         </Tab>
         <Tab title="FAVORITES">
           <Favorites token={token} />
