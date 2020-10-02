@@ -12,7 +12,7 @@ const Navigation = () => {
   const [selectedIndex, setSelectedIndex] = React.useState(1);
 
   const [token, setToken] = useState(null);
-  const [loggedIn, SetLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const getAuthFromCache = async () => {
     try {
@@ -20,20 +20,20 @@ const Navigation = () => {
       console.log("xxxauth", JSON.parse(cachedAuth));
       return JSON.parse(cachedAuth);
     } catch (e) {
-      // saving error
+      alert("Issue get auth from cache in Navigation");
     }
   };
 
   useEffect(() => {
     (async () => {
       let cachedAuth = await getAuthFromCache();
-      console.log("useEffect xxxcachedAuth", cachedAuth);
+      console.log("Auth get from cache in Navigation", cachedAuth);
       setToken(cachedAuth ? cachedAuth.access_token : null);
     })();
   }, [loggedIn]);
 
   const onLoggedInChange = (status) => {
-    SetLoggedIn(status);
+    setLoggedIn(status);
   };
 
   return (

@@ -10,7 +10,6 @@ const Favorites = (props) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("PROPS", props);
     if (props.token) {
       getFav(props.token);
     } else {
@@ -33,15 +32,17 @@ const Favorites = (props) => {
       requestOptions
     )
       .then((response) => response.json())
-      .then((result) => {
-        setFavs(result.data);
-      })
-      .catch((error) => console.log("error", error));
+      .then((result) => setFavs(result.data))
+      .catch((error) => alert("Issue fetching favorites: ", error));
   };
 
   return (
     <Layout>
-      {!props.token && <Text>Please login...</Text>}
+      {!props.token && (
+        <View style={styles.container}>
+          <Text category="h4">Please login...</Text>
+        </View>
+      )}
       {props.token && (
         <FlatList
           onRefresh={getFav}
@@ -92,6 +93,11 @@ const styles = StyleSheet.create({
   },
   titre: {
     textAlign: "center",
+  },
+  container: {
+    minHeight: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 export default Favorites;
