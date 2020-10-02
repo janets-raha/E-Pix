@@ -43,9 +43,6 @@ const Navigation = () => {
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}
       >
-        <Tab title="SEARCH">
-          <Search />
-        </Tab>
         <Tab title="HOME">
           <Home />
         </Tab>

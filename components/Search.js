@@ -8,78 +8,85 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView, Text, StyleSheet, View, FlatList } from "react-native";
 import { SearchBar } from "react-native-elements";
 
-const App = () => {
+const Search = (props) => {
   const [search, setSearch] = useState("");
-  const [filteredDataSource, setFilteredDataSource] = useState([]);
-  const [masterDataSource, setMasterDataSource] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setFilteredDataSource(responseJson);
-        setMasterDataSource(responseJson);
+  const getPictures = (text) => {
+    setLoading(true);
+
+    const myHeaders = new Headers();
+    myHeaders.append(
+      'Authorization',
+      'Client-ID ' + process.env.EXPO_CLIENT_ID
+    );
+
+    const requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+    };
+
+    fetch(
+      "https://api.imgur.com/3/gallery/search/time?q=" + text,
+      requestOptions
+    )
+      .then((Response) => Response.json())
+      .then((result) => {
+        //console.log(result)
+        let res = [];
+        result.data.forEach((post) => {
+          let tmp = {};
+          tmp.postId = post.id;
+          tmp.title = post.title;
+          tmp.favorite = post.favorite;
+          tmp.links = [];
+          let arr = [];
+          if (post.images && Array.isArray(post.images)) {
+            post.images.forEach((picture) => {
+              arr.push({
+                pictureId: picture.id,
+                link: picture.link,
+                type: picture.type,
+                width: picture.width,
+                height: picture.height,
+              });
+            });
+            tmp.links = arr;
+          } else {
+            if (true || post.link) {
+              arr.push({
+                pictureId: post.id,
+                link: post.link,
+                type: post.type,
+                width: post.width,
+                height: post.height,
+              });
+            }
+            tmp.links = arr;
+          }
+          res.push(tmp);
+        });
+
+        props.updatePosts(res)
       })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+        .catch(error => console.error('Error :', error))
+  };
+
+  let timer = null;
+
 
   const searchFilterFunction = (text) => {
-    // Check if searched text is not blank
     if (text) {
-      // Inserted text is not blank
-      // Filter the masterDataSource
-      // Update FilteredDataSource
-      const newData = masterDataSource.filter(function (item) {
-        const itemData = item.title
-          ? item.title.toUpperCase()
-          : "".toUpperCase();
-        const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-      });
-      setFilteredDataSource(newData);
-      setSearch(text);
+      if(timer) clearTimeout(timer); 
+      timer = setTimeout(function(){ getPictures(text) }, 500);
     } else {
-      // Inserted text is blank
-      // Update FilteredDataSource with masterDataSource
-      setFilteredDataSource(masterDataSource);
-      setSearch(text);
-    }
-  };
-
-  const ItemView = ({ item }) => {
-    return (
-      // Flat List Item
-      <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-        {item.id}
-        {"."}
-        {item.title.toUpperCase()}
-      </Text>
-    );
-  };
-
-  const ItemSeparatorView = () => {
-    return (
-      // Flat List Item Separator
-      <View
-        style={{
-          height: 0.5,
-          width: "100%",
-          backgroundColor: "#C8C8C8",
-        }}
-      />
-    );
-  };
-
-  const getItem = (item) => {
-    // Function for click on an item
-    alert("Id : " + item.id + " Title : " + item.title);
+      if(timer) clearTimeout(timer); 
+      props.resetPictures();
+    } 
+    setSearch(text);
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
         <SearchBar
           round
           searchIcon={{ size: 24 }}
@@ -88,24 +95,7 @@ const App = () => {
           placeholder="Type Here..."
           value={search}
         />
-        <FlatList
-          data={filteredDataSource}
-          keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={ItemSeparatorView}
-          renderItem={ItemView}
-        />
-      </View>
-    </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-  },
-  itemStyle: {
-    padding: 10,
-  },
-});
-
-export default App;
+export default Search;

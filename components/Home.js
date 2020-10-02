@@ -12,7 +12,7 @@ import {
 import { Video } from 'expo-av';
 
 import AsyncStorage from '@react-native-community/async-storage';
-import Searchbar from './Searchbar';
+import Search from './Search';
 
 const Home = () => {
   const [homePosts, setPosts] = useState([]);
@@ -143,8 +143,21 @@ const Home = () => {
     return styles.favHeart;
   };
 
+  const updatePosts = (posts) => {
+    setPosts(posts);
+    console.log(posts.length);
+  }
+
+  const resetPictures = () => {
+    getPictures();
+  }
+
   return (
     <Layout>
+      <Search
+        updatePosts = {updatePosts}
+        resetPictures = {resetPictures}
+      />
       <Button
         title="back to top"
         style={styles.btt_button}
@@ -163,10 +176,8 @@ const Home = () => {
         status="warning"
       ></Button>
 
-      {/* <Searchbar></Searchbar> */}
       <FlatList
         ref={backToTop}
-        style={{ marginTop: 70 }}
         onRefresh={getPictures}
         refreshing={loading}
         keyExtractor={(item) => item.postId}
