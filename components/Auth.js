@@ -13,6 +13,7 @@ import {
   TopNavigation,
   TopNavigationAction,
 } from '@ui-kitten/components';
+import { FalsyText } from '@ui-kitten/components/devsupport';
 
 const MenuIcon = (props) => <Icon {...props} name="more-vertical" />;
 
@@ -20,7 +21,7 @@ const InfoIcon = (props) => <Icon {...props} name="info" />;
 
 const LogoutIcon = (props) => <Icon {...props} name="log-out" />;
 
-export default function Auth() {
+export default function Auth(props) {
   //
   const [auth, setAuth] = useState(null);
 
@@ -30,7 +31,7 @@ export default function Auth() {
       // console.log('auth', JSON.parse(cachedAuth));
       return JSON.parse(cachedAuth);
     } catch (e) {
-      // saving error
+      console.error('Issue get async storage');
     }
   };
 
@@ -47,7 +48,7 @@ export default function Auth() {
     try {
       await AsyncStorage.setItem('auth', JSON.stringify(value));
     } catch (e) {
-      // saving error
+      console.error('Issue set async storage');
     }
   };
 
@@ -69,6 +70,13 @@ export default function Auth() {
     }
     setAuth(auth);
     storeData(auth);
+
+    props.onLoggedInChange(true);
+  };
+
+  const onLoggedInChange = (status) => {
+    console.log('quth loged chag', status, props);
+    //props.onLoggedInChange;
   };
 
   const openBrowserAsync = async () => {
@@ -110,6 +118,7 @@ export default function Auth() {
     const removed = await AsyncStorage.removeItem('auth');
     setAuth(null);
     toggleMenu();
+    props.onLoggedInChange(false);
   }
 
   return (
@@ -123,9 +132,7 @@ export default function Auth() {
         {auth && (
           <>
             <View style={styles.alternativeContainer}>
-              <Text onPress={toggleMenu} appearance="alternative">
-                {auth.account_username}
-              </Text>
+              <Text onPress={toggleMenu}>{auth.account_username}</Text>
             </View>
           </>
         )}
@@ -134,12 +141,13 @@ export default function Auth() {
         anchor={renderMenuAction}
         visible={menuVisible}
         onBackdropPress={toggleMenu}
+        style={{ borderColor: 'blue' }}
       >
         <MenuItem
           accessoryLeft={LogoutIcon}
           title="Logout"
           onPress={logout}
-          style={{ padding: 20, textSize: 30 }}
+          style={{ padding: 20 }}
         />
       </OverflowMenu>
     </>
@@ -148,16 +156,19 @@ export default function Auth() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'space-around',
   },
   login: {
     backgroundColor: 'green',
+    borderColor: 'darkgreen',
   },
   alternativeContainer: {
     borderRadius: 4,
-    marginVertical: 2,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginVertical: 0,
     backgroundColor: '#3366FF',
   },
 });

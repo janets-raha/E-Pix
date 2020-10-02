@@ -11,9 +11,13 @@ import {
 
 import Auth from './Auth';
 
-export default function NavBar() {
+export default function NavBar(props) {
   //
-  const renderAuthMenu = () => <Auth />;
+
+  const onLoggedInChange = (status) => {
+    props.onLoggedInChange(status);
+  };
+  const renderAuthMenu = () => <Auth onLoggedInChange={onLoggedInChange} />;
 
   const renderTitle = (props) => (
     <View style={styles.titleContainer}>
@@ -32,9 +36,9 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    color: 'lightblue',
   },
   logo: {
-    marginHorizontal: 16,
     width: 42,
     height: 42,
   },
