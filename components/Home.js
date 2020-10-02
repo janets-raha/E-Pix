@@ -99,7 +99,6 @@ const Home = () => {
   const HeartIcon = (props) => <Icon {...props} name="heart" width={30} height={30} style={{ tintColor: "red" }} />;
 
   const addFavorites = (favId) => {
-    console.log(favId)
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + auth.access_token);
     var requestOptions = {
@@ -130,6 +129,10 @@ const Home = () => {
       }
     })();
   });
+
+  const getStyle = () => {
+    return styles.favHeart
+  }
 
 
   return (
